@@ -18,6 +18,10 @@ var blockOffsetLeft = 50;
 //offset variable for drawing left blocks at desired position
 var blockOffsetTopRight = 300;
 var blockOffsetRight = 50;
+//hero drop velocity 
+var dy = 2;
+//variable to hold the heros radius to be used in collision detection
+var heroRadius = 10;
 
 
 //HERO
@@ -53,14 +57,15 @@ var hero = {
 
 		if(hero.direction === 'right'){
 			//move the heros x position 10 to the right
-			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10 e: 0}
+			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
 			//move the hero x position 10 to the left
 		}else if(hero.direction === "left"){
 
-			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10 e: 0}
+			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
 		}
 	}
 }
+
 
 //BLOCKS
 //
@@ -118,8 +123,7 @@ var drawBlocksRight = function(){
     }
 }
 
-//call right blocks
-drawBlocksRight();
+
 
 
 
@@ -138,7 +142,7 @@ var getRandomNumber = function(){
 var drawBlocksLeft = function(){
 
 
-	for(c=0; c<random; c++) {
+	for(c=0; c<blockColumnCount; c++) {
         for(r=0; r<blockRowCount; r++) {
         	//create a variable to hold offsets for block x and y points
         	var blockX = (c*(blockOffsetRight) + 200);
@@ -158,9 +162,36 @@ var drawBlocksLeft = function(){
 }
 
 //call random number before drawing left blocks to vary count
-getRandomNumber();
-drawBlocksLeft();
+//getRandomNumber();
+//
 
+
+//
+
+//RUN GAME
+//
+//function to draw game and animate it 
+//calls blocks and hero 
+//hero drops at a constant velocity
+var animateCanvas = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    //call left blocks
+	drawBlocksLeft();
+	//call right blocks
+	drawBlocksRight();
+	//places hero on the board
+    hero.drawBody();
+    
+    //constant drop added to hero
+    hero.body.y += dy;
+
+    window.requestAnimationFrame(animateCanvas);
+}
+
+	//initializes hero for the game
+	hero.initHero();
+	animateCanvas();
 
 
 
