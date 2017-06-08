@@ -13,7 +13,10 @@ var blockWidth = 50;
 //height of each block
 var blockHeight = 50;
 //offset variables for drawing right blocks at desired position
-var blockOffsetTop = 300;
+var blockOffsetTopLeft = 300;
+var blockOffsetLeft = 50;
+//offset variable for drawing left blocks at desired position
+var blockOffsetTopRight = 300;
 var blockOffsetRight = 50;
 
 
@@ -47,16 +50,16 @@ for(c=0; c<blockColumnCount; c++){
 
 }
 
-//create a function to draw the blocks on the page
+//create a function to draw the right blocks on the page
 //loop through the blocks array and store the object location to detect collision later
-var drawBlocks = function(){
+var drawBlocksRight = function(){
 
 
 	for(c=0; c<blockColumnCount; c++) {
         for(r=0; r<blockRowCount; r++) {
         	//create a variable to hold offsets for block x and y points
-        	var blockX = (c*(blockOffsetRight));
-            var blockY = (r*(blockOffsetTop)+100);
+        	var blockX = (c*(blockOffsetLeft));
+            var blockY = (r*(blockOffsetTopLeft)+100);
 
             //add the created offset to blocks, it currently interchanges from top and bottom row points
             blocksRight[c][r].x = blockX;
@@ -71,5 +74,35 @@ var drawBlocks = function(){
     }
 }
 
-drawBlocks();
+drawBlocksRight();
+
+
+//create a function to draw the left blocks on the page
+//loop through the blocks array and store the object location to detect collision later
+var drawBlocksLeft = function(){
+
+
+	for(c=0; c<blockColumnCount; c++) {
+        for(r=0; r<blockRowCount; r++) {
+        	//create a variable to hold offsets for block x and y points
+        	var blockX = (c*(blockOffsetRight) + 200);
+            var blockY = (r*(blockOffsetTopRight)+250);
+
+            //add the created offset to blocks, it currently interchanges from top and bottom row points
+            blocksLeft[c][r].x = blockX;
+            blocksLeft[c][r].y = blockY;
+            console.log(blocksLeft[c][r].x, ",", blocksLeft[c][r].y);
+
+            ctx.beginPath();
+            ctx.rect(blockX, blockY, blockWidth, blockHeight);
+            ctx.stroke();
+
+        }
+    }
+}
+
+drawBlocksLeft();
+
+
+
 
