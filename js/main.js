@@ -74,15 +74,27 @@ var drawBlocksRight = function(){
     }
 }
 
+//call right blocks
 drawBlocksRight();
 
+
+
+//create random number for the left blocks for variation in the game between 4-7
+//have this as a function call
+//variable to hold random number
+var random = 0;
+//random number generator function
+var getRandomNumber = function(){
+
+	random = Math.floor(Math.random() * (5-0)) + 0;
+}
 
 //create a function to draw the left blocks on the page
 //loop through the blocks array and store the object location to detect collision later
 var drawBlocksLeft = function(){
 
 
-	for(c=0; c<blockColumnCount; c++) {
+	for(c=0; c<random; c++) {
         for(r=0; r<blockRowCount; r++) {
         	//create a variable to hold offsets for block x and y points
         	var blockX = (c*(blockOffsetRight) + 200);
@@ -101,6 +113,8 @@ var drawBlocksLeft = function(){
     }
 }
 
+//call random number before drawing left blocks to vary count
+getRandomNumber();
 drawBlocksLeft();
 
 
