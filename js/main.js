@@ -38,14 +38,14 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 250, y:90, r: 10, e: 0};
+		this.body = {x: 50, y:350, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
 
 
 		ctx.beginPath();
-    	ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
+    	ctx.arc(hero.body.x, hero.body.y, heroRadius, 0, Math.PI*2);
     	ctx.fillStyle = "black";
     	ctx.fill();
     	ctx.closePath();
@@ -113,7 +113,7 @@ var drawBlocksRight = function(){
             //add the created offset to blocks, it currently interchanges from top and bottom row points
             blocksRight[c][r].x = blockX;
             blocksRight[c][r].y = blockY;
-            console.log(blocksRight[c][r].x, ",", blocksRight[c][r].y);
+            // console.log(blocksRight[c][r].x, ",", blocksRight[c][r].y);
 
             ctx.beginPath();
             ctx.rect(blockX, blockY, blockWidth, blockHeight);
@@ -151,7 +151,7 @@ var drawBlocksLeft = function(){
             //add the created offset to blocks, it currently interchanges from top and bottom row points
             blocksLeft[c][r].x = blockX;
             blocksLeft[c][r].y = blockY;
-            console.log(blocksLeft[c][r].x, ",", blocksLeft[c][r].y);
+            //console.log(blocksLeft[c][r].x, ",", blocksLeft[c][r].y);
 
             ctx.beginPath();
             ctx.rect(blockX, blockY, blockWidth, blockHeight);
@@ -165,8 +165,56 @@ var drawBlocksLeft = function(){
 //getRandomNumber();
 //
 
-
+//COLLSION DETECTION
 //
+//collision logic calls checkcollion which return true
+function collisionDetection() {
+    
+           
+		console.log("collion")
+		//call checkcollision
+		checkCollision();
+            
+       
+}
+
+//checks if hero x location is in the array of objects and if so returns true for left side
+	var checkCollision = function(){
+
+		//loop through right blocks to check for collision
+		for(var c=0; c<blockColumnCount; c++){
+
+			for(var r =0; r < blockRowCount; r++){
+
+						console.log(blockColumnCount);
+						console.log(blockRowCount);
+						console.log(c);
+						console.log(r);
+
+						console.log(blocksLeft[c][r].x, ",", blocksLeft[c][r].y);
+            			console.log(hero.body.y);
+
+            	//check if hero body has touched any of the blocks
+				if(hero.body.x >= blocksLeft[c][r].x && hero.body.y === blocksLeft[c][r].y - heroRadius){
+					
+					//stop motion
+                    dy = 0;
+				}
+				if(hero.body.x <= blocksRight[c][r].x && hero.body.y === blocksRight[c][r].y - heroRadius){
+
+					 console.log(blocksRight[c][r].x, ",", blocksRight[c][r].y);
+            		console.log(hero.body.x);
+					console.log("its a hit");
+					//stop motion
+					dy = 0;
+				}
+				else{
+
+					//do nothing
+				 }
+			}
+		}
+	}
 
 //RUN GAME
 //
@@ -182,6 +230,8 @@ var animateCanvas = function() {
 	drawBlocksRight();
 	//places hero on the board
     hero.drawBody();
+
+    collisionDetection();
     
     //constant drop added to hero
     hero.body.y += dy;
