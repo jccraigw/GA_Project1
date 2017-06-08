@@ -20,6 +20,50 @@ var blockOffsetTopRight = 300;
 var blockOffsetRight = 50;
 
 
+//HERO
+//
+//create the hero object that will move around the board
+//it will need a body to hold direction
+//it will need a starting point
+//if will need to be draw and have a direction to move
+var hero = {
+	//body will contain the coordinates for the hero
+	body:{},
+	//the direcctioin the hero is traveling
+	direction: "",
+	//create the staring point for the hero
+	initHero: function(){
+
+		this.body = {x: 250, y:90, r: 10, e: 0};
+	},
+	//draw the hero on the canvas
+	drawBody: function(){
+
+
+		ctx.beginPath();
+    	ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
+    	ctx.fillStyle = "black";
+    	ctx.fill();
+    	ctx.closePath();
+
+	},
+	//move is based off left and right movements only
+	//the hero should be constantly falling like gravity
+	move: function(){
+
+		if(hero.direction === 'right'){
+			//move the heros x position 10 to the right
+			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10 e: 0}
+			//move the hero x position 10 to the left
+		}else if(hero.direction === "left"){
+
+			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10 e: 0}
+		}
+	}
+}
+
+//BLOCKS
+//
 //create right side blocks 
 //hold them in an array to store for collison detection
 var blocksRight = [];
