@@ -5,7 +5,7 @@ var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
 // //hero drop velocity 
-var dy = 2;
+var dy = 1;
 //variable to hold the heros radius to be used in collision detection
 var heroRadius = 10;
 
@@ -82,16 +82,16 @@ document.addEventListener('keydown', function(event){
 //array to hold the line obstacles that make up the level;
 //keeps a min and max for each row along the x axis
 //added random blocks for left side to add variation then randomly select one each time
-var levelArray = [{x: 0, y: 100, xMax: 200}, 
-				  {x: 0, y: 400, xMax: 200}, 
-				  {x:200, y: 250, xMax:400},
-				  {x:200, y: 250, xMax:250},
-				  {x:200, y: 250, xMax:300},
-				  {x:200, y: 250, xMax:350},
-				  {x:200, y:550, xMax:400},
-				  {x:200, y:550, xMax:250},
-				  {x:200, y:550, xMax:300},
-				  {x:200, y:550, xMax:350},
+var levelArray = [{x: 0, y: 100, xMax: 200}, //0
+				  {x: 0, y: 400, xMax: 200}, //1  
+				  {x:200, y: 250, xMax:250}, //2
+				  {x:200, y: 250, xMax:300}, //3
+				  {x:200, y: 250, xMax:350}, //4
+				  {x:200, y: 250, xMax:400}, //5
+				  {x:200, y:550, xMax:250}, //6
+				  {x:200, y:550, xMax:300}, //7
+				  {x:200, y:550, xMax:350}, //8
+				  {x:200, y:550, xMax:400}, //9
 				  ];
 //array to hold the x and y position of the items on the canvas
 var itemsArray = [{x: 250, y: 150, status: 1},
@@ -158,8 +158,8 @@ var drawItems = function(){
 //random number generator function for top and bottom left lines
 var getRandomNumber = function(){
 
-	randomTop= Math.floor(Math.random() * (5-2)+2);
-	randomBottom = Math.floor(Math.random()*(9-6)+ 6);
+	randomTop= Math.floor(Math.random() * (4-2)+2);
+	randomBottom = Math.floor(Math.random()*(8-6)+ 6);
 }
 
 
@@ -169,60 +169,120 @@ var getRandomNumber = function(){
 //collision logic checks if ball is between the min and max range for a line on y axis
 //if it is between it is stopped in its tracks
 //if it goes outside of it to 200 range it begins falling again :)
+ 
 function collisionDetection() {
     
-           
-		
+          
+	
 		//checks the array for a collison along the lines according to hero position on canvas
 		for(var i = 0; i < levelArray.length; i++){
-
+				var flag = false;
 			//if the hero touches the line he is frozen and can only move left or right till he gets to 200
 			//might have to add logic to test when random number is less that for for middle
 			// the hero will be able to fall at different points when random is introduced
+
+			console.log("i:", i)
+			console.log("flag", flag)
 			if(hero.body.y=== levelArray[i].y - heroRadius && (hero.body.x > levelArray[i].x && hero.body.x < levelArray[i].xMax) ){
 
+				console.log("heroy:", hero.body.y, "herox:", hero.body.x, "levelY:", levelArray[i].y, "levelX:", levelArray[i].x, "levelxMax:", levelArray[i].xMax, "i:", i, "randT", randomTop, "randB", randomBottom);
 				console.log("detection");
+				flag = true;
 
 				dy= 0;
 			
 			
 
-			}else if(hero.body.x === 200 && hero.body.y != 700- heroRadius){
+			}else if(hero.body.x === 200 && hero.body.y != 700- heroRadius && flag != true){
 
-				dy= 2;
+				dy= 1;
+
+				
 
 
 				
 			}
 
-			//logic to decide when to fall when row is random sized
-			if(randomTop ===3 || randomBottom ===7){
+			if(randomTop ===2 && flag != true){
 
-				if(hero.body.x ===260){
+				if(hero.body.x >260){
 
-					dy=2;
+						
+					dy=1;
+					
 
 					
 				}
 			
 			}
+			if(randomTop === 3  && flag != true){
 
-			if(randomTop === 4 || randomBottom === 8){
+				if(hero.body.x > 300){
 
-				if(hero.body.x === 300){
-
-					dy= 2;
+					dy= 1;
+					
 					
 				}
 			}
-			if(randomTop === 5 || randomBottom === 9){
+			if(randomTop === 4 && flag != true){
 
-				if(hero.body.x ===350 ){
+				if(hero.body.x >350){
 
-					dy= 2;
+					dy= 1;
+					
 					
 				}
 			
+			}
+			if(randomBottom ===6 && flag != true){
+
+				
+
+				if(hero.body.x > 260){
+
+
+					dy=1;
+					
+
+					
+				}
+
+
+
+
+			}
+			if(randomBottom ===7 && flag != true){
+
+				console.log("hi");
+
+				if(hero.body.x >300){
+
+
+					dy=1;
+					
+
+					
+				}
+
+
+
+
+			}
+			
+			if(randomBottom ===8 && flag != true){
+
+				if(hero.body.x >350){
+
+
+					dy=1;
+					
+
+					
+				}
+
+
+
+
 			}
 				//stops ball at the bottom of myCanvas
 				if(hero.body.y === 700- heroRadius){
