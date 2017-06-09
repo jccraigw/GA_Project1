@@ -31,7 +31,7 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 100, y:10, r: 10, e: 0};
+		this.body = {x: 250, y:10, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
@@ -51,10 +51,13 @@ var hero = {
 		if(hero.direction === 'right'){
 			//move the heros x position 10 to the right
 			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
+			dy=1;
 			//move the hero x position 10 to the left
 		}else if(hero.direction === "left"){
 
 			hero.body = {x: hero.body.x - 10, y: hero.body.y, r: 10, e: 0}
+			dy=1;
+
 		}
 	}
 }
@@ -172,130 +175,30 @@ var getRandomNumber = function(){
  
 function collisionDetection() {
     
-          
-	
-		//checks the array for a collison along the lines according to hero position on canvas
-		for(var i = 0; i < levelArray.length; i++){
-				var flag = false;
-			//if the hero touches the line he is frozen and can only move left or right till he gets to 200
-			//might have to add logic to test when random number is less that for for middle
-			// the hero will be able to fall at different points when random is introduced
+			
+				//checks the array for a collison along the lines according to hero position on canvas
+				if((hero.body.y=== levelArray[0].y - heroRadius && (hero.body.x > levelArray[0].x && hero.body.x < levelArray[0].xMax))||
+				(hero.body.y=== levelArray[1].y - heroRadius && (hero.body.x > levelArray[1].x && hero.body.x < levelArray[1].xMax)) ||
+				(hero.body.y=== levelArray[randomTop].y - heroRadius && (hero.body.x > levelArray[randomTop].x && hero.body.x < levelArray[randomTop].xMax))||
+				(hero.body.y=== levelArray[randomBottom].y - heroRadius && (hero.body.x > levelArray[randomBottom].x && hero.body.x < levelArray[randomBottom].xMax))){
 
-			console.log("i:", i)
-			console.log("flag", flag)
-			if(hero.body.y=== levelArray[i].y - heroRadius && (hero.body.x > levelArray[i].x && hero.body.x < levelArray[i].xMax) ){
-
-				console.log("heroy:", hero.body.y, "herox:", hero.body.x, "levelY:", levelArray[i].y, "levelX:", levelArray[i].x, "levelxMax:", levelArray[i].xMax, "i:", i, "randT", randomTop, "randB", randomBottom);
-				console.log("detection");
-				flag = true;
-
-				dy= 0;
+					dy= 0;
 			
 			
 
-			}else if(hero.body.x === 200 && hero.body.y != 700- heroRadius && flag != true){
+				}else{
 
-				dy= 1;
+					dy= +dy;
 
-				
-
-
-				
-			}
-
-			if(randomTop ===2 && flag != true){
-
-				if(hero.body.x >260){
-
-						
-					dy=1;
-					
-
-					
 				}
-			
-			}
-			if(randomTop === 3  && flag != true){
-
-				if(hero.body.x > 300){
-
-					dy= 1;
-					
-					
-				}
-			}
-			if(randomTop === 4 && flag != true){
-
-				if(hero.body.x >350){
-
-					dy= 1;
-					
-					
-				}
-			
-			}
-			if(randomBottom ===6 && flag != true){
-
-				
-
-				if(hero.body.x > 260){
-
-
-					dy=1;
-					
-
-					
-				}
-
-
-
-
-			}
-			if(randomBottom ===7 && flag != true){
-
-				console.log("hi");
-
-				if(hero.body.x >300){
-
-
-					dy=1;
-					
-
-					
-				}
-
-
-
-
-			}
-			
-			if(randomBottom ===8 && flag != true){
-
-				if(hero.body.x >350){
-
-
-					dy=1;
-					
-
-					
-				}
-
-
-
-
-			}
 				//stops ball at the bottom of myCanvas
 				if(hero.body.y === 700- heroRadius){
 
 				dy=0;
 
-			}
+				}
 
-			
 
-         }
-          
-       
 }
 
 //item collision detection
@@ -330,12 +233,13 @@ var animateCanvas = function() {
     drawItems();
      
 	//places hero on the board
+	collisionDetection();
     hero.drawBody();
   
 
 	
     
-    collisionDetection();
+    
     collisionDetection_Items();
      //constant drop added to hero
     hero.body.y += dy;
