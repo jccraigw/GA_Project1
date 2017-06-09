@@ -17,6 +17,9 @@ var randomBottom = 0;
 var itemWidth = 50;
 var itemHeight = 50; 
 
+
+var doAnim=true;
+
 //HERO
 //
 //create the hero object that will move around the board
@@ -107,10 +110,10 @@ var levelArray = [{x: 0, y: 150, xMax: 250}, //0
 				  {x:200, y:550, xMax:400}, //9
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 250, y: 150, status: 1},
-				  {x: 100, y: 300, status: 1},
-				  {x: 250, y:500, status: 1},
-				  {x: 100, y: 600, status: 1}];
+var itemsArray = [{x: 290, y: 150, status: 1},
+				  {x: 60, y: 300, status: 1},
+				  {x: 290, y:500, status: 1},
+				  {x: 60, y: 600, status: 1}];
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -202,11 +205,25 @@ function collisionDetection() {
 
 				){
 
-					
+					//this logic will check as long as the object has not reached the top at which point gameover
+					if(hero.body.y > heroRadius){
 					hero.body = {x: hero.body.x, y: hero.body.y - 2, r: 12.5, e:0}
 
-				console.log('detection');
-			
+					}
+					else if(hero.body.y ===heroRadius){
+						//you lose when you touch between the top and a line
+						//game stops
+						dy = 0;
+						doAnim=false;
+
+
+						//delay restart to give time to reset
+						setTimeout(restartAnimate, 5000);
+					}
+					console.log('detection');
+
+
+					
 			
 
 				}else{
@@ -250,10 +267,37 @@ var collisionDetection_Items = function(){
 //function to draw game and animate it 
 //calls blocks and hero 
 //hero drops at a constant velocity
-var frameCounter = 0;
+//restart the animate after it stops when the hero is between line and top wall
+var restartAnimate = function(){
+
+
+	var context;
+	doAnim=true;
+	dy= 1;
+	hero.body.y = hero.body.y + 20;
+	animateCanvas();
+
+}
+
+
+//function to clear the canvas
+var clearCanvas = function(){
+
+	ctx.clearRect(0,0, canvas.width, canvas.height);
+}
+
 
 
 var animateCanvas = function() {
+
+	//stops the animation and returns nothing
+	if(!doAnim){
+		
+		setTimeout(clearCanvas, 1000);		
+		context=null; 
+		return;
+
+	}
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     //this logic resets lines after they have moved off the canvas
@@ -401,5 +445,9 @@ var animateCanvas = function() {
 	hero.initHero();
 	animateCanvas();
 
+
+	// var context=...
+	// doAnim=true;
+	// animateCanvas();
 
 
