@@ -49,15 +49,21 @@ var hero = {
 	move: function(){
 
 		if(hero.direction === 'right'){
+
+			//keeps hero on canvas
+			if(hero.body.x < canvas.width - heroRadius){
 			//move the heros x position 10 to the right
 			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
 			dy=1;
+			}
 			//move the hero x position 10 to the left
 		}else if(hero.direction === "left"){
 
+			//keeps hero on canvas
+			if(hero.body.x > heroRadius){
 			hero.body = {x: hero.body.x - 10, y: hero.body.y, r: 10, e: 0}
 			dy=1;
-
+			}
 		}
 	}
 }
@@ -196,7 +202,7 @@ function collisionDetection() {
 
 				){
 
-					// dy= 0;
+					
 					hero.body = {x: hero.body.x, y: hero.body.y - 2, r: 12.5, e:0}
 
 				console.log('detection');
