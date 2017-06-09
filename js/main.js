@@ -13,6 +13,10 @@ var heroRadius = 10;
 var randomTop= 0;
 var randomBottom = 0;
 
+//variables to hold the items height and width
+var itemWidth = 50;
+var itemHeight = 50; 
+
 //HERO
 //
 //create the hero object that will move around the board
@@ -89,8 +93,11 @@ var levelArray = [{x: 0, y: 100, xMax: 200},
 				  {x:200, y:550, xMax:300},
 				  {x:200, y:550, xMax:350},
 				  ];
-
-
+//array to hold the x and y position of the items on the canvas
+var itemsArray = [{x: 250, y: 150, status: 1},
+				  {x: 100, y: 300, status: 1},
+				  {x: 250, y:450, status: 1},
+				  {x: 100, y: 600, status: 1}];
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -127,6 +134,21 @@ var drawLines= function(){
 
 }
 
+//draw the items on the screen taking the position from the items array
+//if the status is 1 then the brick hasnt been hit and can be drawn
+var drawItems = function(){
+
+		for(var i = 0; i < 4; i++){
+			if(itemsArray[i].status === 1){
+				ctx.beginPath();
+	            ctx.rect(itemsArray[i].x, itemsArray[i].y, itemWidth, itemHeight);
+	            ctx.fillStyle = "#0095DD";
+	            ctx.fill();
+	            ctx.closePath();
+	        }
+
+        }
+}
 
 
 //create random number for the left blocks for variation in the game between 4-7
@@ -169,6 +191,7 @@ function collisionDetection() {
 
 				dy= 2;
 
+
 				
 			}
 
@@ -178,6 +201,8 @@ function collisionDetection() {
 				if(hero.body.x ===260){
 
 					dy=2;
+
+					
 				}
 			
 			}
@@ -187,6 +212,7 @@ function collisionDetection() {
 				if(hero.body.x === 300){
 
 					dy= 2;
+					
 				}
 			}
 			if(randomTop === 5 || randomBottom === 9){
@@ -194,6 +220,7 @@ function collisionDetection() {
 				if(hero.body.x ===350 ){
 
 					dy= 2;
+					
 				}
 			
 			}
@@ -201,6 +228,7 @@ function collisionDetection() {
 				if(hero.body.y === 700- heroRadius){
 
 				dy=0;
+
 			}
 
 			
@@ -210,6 +238,23 @@ function collisionDetection() {
        
 }
 
+//item collision detection
+//when it they will disappear from the board
+//loop through the items array and compare the location to the heros to determine if hit
+var collisionDetection_Items = function(){
+
+
+	for(var i = 0; i < 4; i++){
+		//if hero hits item then dont draw item on screen
+		if(itemsArray[i].status === 1){
+			if(hero.body.x > itemsArray[i].x && hero.body.x < itemsArray[i].x+itemWidth && hero.body.y > itemsArray[i].y && hero.body.y < itemsArray[i].y+itemHeight) {
+	                //item hit so dont draw it
+	                itemsArray[i].status = 0;
+	            }
+		}
+
+	}
+}
 
 
 
@@ -222,8 +267,8 @@ var animateCanvas = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     drawLines();
-    
-
+    drawItems();
+     
 	//places hero on the board
     hero.drawBody();
   
@@ -231,9 +276,10 @@ var animateCanvas = function() {
 	
     
     collisionDetection();
+    collisionDetection_Items();
      //constant drop added to hero
     hero.body.y += dy;
-    
+   
 
    
   
