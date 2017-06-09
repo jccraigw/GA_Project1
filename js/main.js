@@ -9,6 +9,9 @@ var dy = 2;
 //variable to hold the heros radius to be used in collision detection
 var heroRadius = 10;
 
+//random numbers for left side top and bottom lines
+var randomTop= 0;
+var randomBottom = 0;
 
 //HERO
 //
@@ -74,22 +77,54 @@ document.addEventListener('keydown', function(event){
 //
 //array to hold the line obstacles that make up the level;
 //keeps a min and max for each row along the x axis
+//added random blocks for left side to add variation then randomly select one each time
 var levelArray = [{x: 0, y: 100, xMax: 200}, 
 				  {x: 0, y: 400, xMax: 200}, 
 				  {x:200, y: 250, xMax:400},
-				  {x:200, y:550, xMax:400}];
+				  {x:200, y: 250, xMax:250},
+				  {x:200, y: 250, xMax:300},
+				  {x:200, y: 250, xMax:350},
+				  {x:200, y:550, xMax:400},
+				  {x:200, y:550, xMax:250},
+				  {x:200, y:550, xMax:300},
+				  {x:200, y:550, xMax:350},
+				  ];
+
+
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
 //might have to add argument to take values to be able to move lines up and down
 var drawLines= function(){
 
-	for(var i = 0; i < 4; i++){
+	for(var i = 0; i < 2; i++){
 		ctx.beginPath();
 		ctx.moveTo(levelArray[i].x, levelArray[i].y);
 		ctx.lineTo(levelArray[i].xMax, levelArray[i].y);
 		ctx.stroke();
 	}
+
+	
+	for(var i = 0; i < 2; i++){
+		
+		if(i === 0){
+
+
+			ctx.beginPath();
+			ctx.moveTo(levelArray[randomTop].x, levelArray[randomTop].y);
+			ctx.lineTo(levelArray[randomTop].xMax, levelArray[randomTop].y);
+			ctx.stroke();
+
+		}
+		else{
+
+			ctx.beginPath();
+			ctx.moveTo(levelArray[randomBottom].x, levelArray[randomBottom].y);
+			ctx.lineTo(levelArray[randomBottom].xMax, levelArray[randomBottom].y);
+			ctx.stroke();
+		}
+	}
+
 }
 
 
@@ -97,11 +132,12 @@ var drawLines= function(){
 //create random number for the left blocks for variation in the game between 4-7
 //have this as a function call
 //variable to hold random number
-var random = 0;
-//random number generator function
+
+//random number generator function for top and bottom left lines
 var getRandomNumber = function(){
 
-	random = Math.floor(Math.random() * (5-0)) + 0;
+	randomTop= Math.floor(Math.random() * (5-2)+2);
+	randomBottom = Math.floor(Math.random()*(9-6)+ 6);
 }
 
 
@@ -127,16 +163,46 @@ function collisionDetection() {
 
 				dy= 0;
 			
+			
 
 			}else if(hero.body.x === 200 && hero.body.y != 700- heroRadius){
 
 				dy= 2;
 
 				
-			}else if(hero.body.y === 700- heroRadius){
+			}
+
+			//logic to decide when to fall when row is random sized
+			if(randomTop ===3 || randomBottom ===7){
+
+				if(hero.body.x ===260){
+
+					dy=2;
+				}
+			
+			}
+
+			if(randomTop === 4 || randomBottom === 8){
+
+				if(hero.body.x === 300){
+
+					dy= 2;
+				}
+			}
+			if(randomTop === 5 || randomBottom === 9){
+
+				if(hero.body.x ===350 ){
+
+					dy= 2;
+				}
+			
+			}
+				//stops ball at the bottom of myCanvas
+				if(hero.body.y === 700- heroRadius){
 
 				dy=0;
 			}
+
 			
 
          }
@@ -157,6 +223,7 @@ var animateCanvas = function() {
     
     drawLines();
     
+
 	//places hero on the board
     hero.drawBody();
   
@@ -176,6 +243,7 @@ var animateCanvas = function() {
 }
 
 	//initializes hero for the game
+	getRandomNumber();
 	hero.initHero();
 	animateCanvas();
 
