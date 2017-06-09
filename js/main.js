@@ -9,7 +9,8 @@ var dy = 2;
 //variable to hold the heros radius to be used in collision detection
 var heroRadius = 10;
 
-
+var x = canvas.width/2;
+var y = canvas.height-30;
 //HERO
 //
 //create the hero object that will move around the board
@@ -124,7 +125,9 @@ function collisionDetection() {
 				dy= 0;
 			
 
-			}else{
+			}else if(hero.body.x === 200){
+
+				dy= 2;
 
 				
 			}
@@ -150,7 +153,7 @@ var animateCanvas = function() {
     
 	//places hero on the board
     hero.drawBody();
-
+  
 
 	
     
@@ -159,7 +162,7 @@ var animateCanvas = function() {
     
 
     //constant drop added to hero
-    
+  
     
     
     window.requestAnimationFrame(animateCanvas);
