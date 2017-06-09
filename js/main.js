@@ -128,11 +128,14 @@ function collisionDetection() {
 				dy= 0;
 			
 
-			}else if(hero.body.x === 200){
+			}else if(hero.body.x === 200 && hero.body.y != 700- heroRadius){
 
 				dy= 2;
 
 				
+			}else if(hero.body.y === 700- heroRadius){
+
+				dy=0;
 			}
 			
 
