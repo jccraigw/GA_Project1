@@ -159,12 +159,16 @@ var drawItems = function(){
 //variable to hold random number
 
 //random number generator function for top and bottom left lines
-var getRandomNumber = function(){
+var getRandomTop = function(){
 
 	randomTop= Math.floor(Math.random() * (4-2)+2);
-	randomBottom = Math.floor(Math.random()*(8-6)+ 6);
+	
 }
 
+var getRandomBottom = function(){
+
+	randomBottom = Math.floor(Math.random()*(8-6)+ 6);
+}
 
 
 //COLLSION DETECTION
@@ -182,7 +186,10 @@ function collisionDetection() {
 				(hero.body.y=== levelArray[randomTop].y - heroRadius && (hero.body.x > levelArray[randomTop].x && hero.body.x < levelArray[randomTop].xMax))||
 				(hero.body.y=== levelArray[randomBottom].y - heroRadius && (hero.body.x > levelArray[randomBottom].x && hero.body.x < levelArray[randomBottom].xMax))){
 
-					dy= 0;
+					// dy= 0;
+					hero.body = {x: hero.body.x, y: hero.body.y - 2, r: 12.5, e:0}
+
+				console.log('detection');
 			
 			
 
@@ -194,7 +201,8 @@ function collisionDetection() {
 				//stops ball at the bottom of myCanvas
 				if(hero.body.y === 700- heroRadius){
 
-				dy=0;
+				
+				hero.body = {x: hero.body.x, y: hero.body.y - 2, r: 12.5, e:0}
 
 				}
 
@@ -228,14 +236,51 @@ var collisionDetection_Items = function(){
 //hero drops at a constant velocity
 var animateCanvas = function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    //this logic resets lines after they have moved off the canvas
+    //collsion must be detected again as lines rise
+    collisionDetection();
+    if(levelArray[0].y === -50){
+
+    	levelArray[0].y = 700;
+    }
+       if(levelArray[1].y === -50){
+
+    	levelArray[1].y = 700;
+
+  
+    }
+       if(levelArray[randomTop].y === -50){
+
+
+  		getRandomTop();
+    	levelArray[randomTop].y = 700;
+
+    }
+       if(levelArray[randomBottom].y === -50){
+
+       	getRandomBottom();
+    	levelArray[randomBottom].y = 700;
+
+  
+
+    }
+
+
+    //this moves the lines up the canvas
+    levelArray[0].y = levelArray[0].y - 1;
+    levelArray[1].y = levelArray[1].y - 1;
+    levelArray[randomTop].y = levelArray[randomTop].y - 1;
+    levelArray[randomBottom].y = levelArray[randomBottom].y - 1;
+
     
     drawLines();
     drawItems();
      
 	//places hero on the board
-	collisionDetection();
+	
     hero.drawBody();
-  
+  	collisionDetection();
 
 	
     
@@ -246,14 +291,14 @@ var animateCanvas = function() {
    
 
    
-  
     
     
     window.requestAnimationFrame(animateCanvas);
 }
 
 	//initializes hero for the game
-	getRandomNumber();
+	getRandomTop();
+	getRandomBottom();
 	hero.initHero();
 	animateCanvas();
 
