@@ -9,8 +9,7 @@ var dy = 2;
 //variable to hold the heros radius to be used in collision detection
 var heroRadius = 10;
 
-var x = canvas.width/2;
-var y = canvas.height-30;
+
 //HERO
 //
 //create the hero object that will move around the board
@@ -69,11 +68,20 @@ document.addEventListener('keydown', function(event){
  
 });
 
+
+//GAMEBOARD
+//
+//
+//array to hold the line obstacles that make up the level;
+//keeps a min and max for each row along the x axis
 var levelArray = [{x: 0, y: 100, xMax: 200}, 
 				  {x: 0, y: 400, xMax: 200}, 
 				  {x:200, y: 250, xMax:400},
 				  {x:200, y:550, xMax:400}];
 
+//function to draw the game board on the canvas
+//draws four lines that will later move
+//might have to add argument to take values to be able to move lines up and down
 var drawLines= function(){
 
 	for(var i = 0; i < 4; i++){
@@ -100,24 +108,19 @@ var getRandomNumber = function(){
 
 //COLLSION DETECTION
 //
-//collision logic calls checkcollion which return true
+//collision logic checks if ball is between the min and max range for a line on y axis
+//if it is between it is stopped in its tracks
+//if it goes outside of it to 200 range it begins falling again :)
 function collisionDetection() {
     
            
-		// console.log("collion")
-		// //call checkcollision
-		// checkCollision();
-
+		
+		//checks the array for a collison along the lines according to hero position on canvas
 		for(var i = 0; i < levelArray.length; i++){
 
-			console.log("HeroX: " + hero.body.x);
-			console.log("AX "+levelArray[i].x);
-			console.log("AM "+levelArray[i].xMax);
-			console.log("AY "+levelArray[i].y);
-			console.log('HeroY: ' + hero.body.y);
-
-			
-
+			//if the hero touches the line he is frozen and can only move left or right till he gets to 200
+			//might have to add logic to test when random number is less that for for middle
+			// the hero will be able to fall at different points when random is introduced
 			if(hero.body.y=== levelArray[i].y - heroRadius && (hero.body.x > levelArray[i].x && hero.body.x < levelArray[i].xMax) ){
 
 				console.log("detection");
@@ -158,10 +161,11 @@ var animateCanvas = function() {
 	
     
     collisionDetection();
+     //constant drop added to hero
     hero.body.y += dy;
     
 
-    //constant drop added to hero
+   
   
     
     
