@@ -85,16 +85,16 @@ document.addEventListener('keydown', function(event){
 //array to hold the line obstacles that make up the level;
 //keeps a min and max for each row along the x axis
 //added random blocks for left side to add variation then randomly select one each time
-var levelArray = [{x: 0, y: 100, xMax: 200}, //0
-				  {x: 0, y: 400, xMax: 200},
-				  {x: 0, y: 200, xMax: 150},
+var levelArray = [{x: 0, y: 150, xMax: 250}, //0
+				  {x: 0, y: 400, xMax: 250},
+				  {x: 400, y: 450, xMax: 300},
 				  {x:150,y:300, xMax: 400},
 				  {x:0 , y: 500, xMax:150},
 				  {x:0, y:650, xMax:200}, //1  
-				  {x:200, y: 50, xMax:250}, //2
-				  {x:200, y: 50, xMax:300}, //3
-				  {x:200, y: 50, xMax:350}, //4
-				  {x:200, y: 50, xMax:400}, //5
+				  {x:200, y: 700, xMax:250}, //2
+				  {x:200, y: 700, xMax:300}, //3
+				  {x:200, y: 700, xMax:350}, //4
+				  {x:200, y: 700, xMax:400}, //5
 				  {x:200, y:550, xMax:250}, //6
 				  {x:200, y:550, xMax:300}, //7
 				  {x:200, y:550, xMax:350}, //8
@@ -103,7 +103,7 @@ var levelArray = [{x: 0, y: 100, xMax: 200}, //0
 //array to hold the x and y position of the items on the canvas
 var itemsArray = [{x: 250, y: 150, status: 1},
 				  {x: 100, y: 300, status: 1},
-				  {x: 250, y:450, status: 1},
+				  {x: 250, y:500, status: 1},
 				  {x: 100, y: 600, status: 1}];
 
 //function to draw the game board on the canvas
@@ -212,7 +212,7 @@ function collisionDetection() {
 				if(hero.body.y === 700- heroRadius){
 
 				
-				hero.body = {x: hero.body.x, y: hero.body.y - 350, r: 12.5, e:0}
+				hero.body = {x: hero.body.x, y: hero.body.y - 50, r: 12.5, e:0}
 
 				}
 
@@ -301,6 +301,53 @@ var animateCanvas = function() {
 
     }
 
+    //this logic resets items
+    if(itemsArray[0].y === -50){
+
+
+    	itemsArray[0].y = 700;
+    	if(itemsArray[0].status === 0){
+
+    		itemsArray[0].status = 1;
+    		drawItems();
+    	}
+    }
+       if(itemsArray[1].y === -50){
+
+
+    	itemsArray[1].y = 700;
+    	if(itemsArray[1].status === 0){
+
+    		itemsArray[1].status = 1;
+    		drawItems();
+    	}
+    }
+       if(itemsArray[2].y === -50){
+
+
+
+    	itemsArray[2].y = 700;
+    	if(itemsArray[2].status === 0){
+
+    		itemsArray[2].status = 1;
+    		drawItems();
+    	}
+    }
+     if(itemsArray[3].y === -50){
+
+
+
+    	itemsArray[3].y = 700;
+    	if(itemsArray[3].status === 0){
+
+    		itemsArray[3].status = 1;
+    		drawItems();
+    	}
+    }
+  
+
+  
+
 
 
     //this moves the lines up the canvas
@@ -312,6 +359,13 @@ var animateCanvas = function() {
     levelArray[3].y = levelArray[3].y - 1;
     levelArray[4].y = levelArray[4].y - 1;
     levelArray[5].y = levelArray[5].y - 1;
+
+
+    //this moves boxes up the canvas
+    itemsArray[0].y = itemsArray[0].y -1;
+    itemsArray[1].y = itemsArray[1].y -1;
+    itemsArray[2].y = itemsArray[2].y -1;
+    itemsArray[3].y = itemsArray[3].y -1;
     
     drawLines();
     drawItems();
