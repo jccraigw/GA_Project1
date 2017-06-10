@@ -8,6 +8,8 @@ var ctx = canvas.getContext('2d');
 var image = document.getElementById('source');
 var barrier = document.getElementById('barrier');
 var chest = document.getElementById('treasure');
+var splash = document.getElementById('splash');
+var boost = document.getElementById('star');
 
 // //hero drop velocity 
 var dy = 1;
@@ -163,10 +165,10 @@ var levelArray = [{x: 300, y: 50, xMax: 400}, //0
 				  {x:200, y:450, xMax:400}, //19
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 290, y: 200, status: 1},
-				  {x: 60, y: 350, status: 1},
-				  {x: 290, y:500, status: 1},
-				  {x: 60, y: 600, status: 1}];
+var itemsArray = [{x: 300, y: 200, status: 1},
+				  {x: 50, y: 350, status: 1},
+				  {x: 300, y:500, status: 1},
+				  {x: 50, y: 600, status: 1}];
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -325,7 +327,12 @@ var drawItems = function(){
 		for(var i = 0; i < 4; i++){
 			if(itemsArray[i].status === 1){
 
+				if(i === 0){
+
+					ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,50, 50)
+				}else{
 				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 50, 50);
+				}
 				// ctx.beginPath();
 	   //          ctx.rect(itemsArray[i].x, itemsArray[i].y, itemWidth, itemHeight);
 	   //          ctx.fillStyle = "#0095DD";
@@ -383,6 +390,11 @@ function collisionDetection() {
 
 
 						//delay restart to give time to reset
+						//testing if this is where i can display message
+						console.log("in collisionDetection");
+
+						//	alert('GAME OVER');
+
 						setTimeout(restartAnimate, 5000);
 					}
 					console.log('detection');
@@ -397,10 +409,12 @@ function collisionDetection() {
 
 				}
 				//stops ball at the bottom of myCanvas
-				if(hero.body.y === 700- heroRadius){
+				if(hero.body.y >= 700- heroRadius){
 
 				
-				hero.body = {x: hero.body.x, y: hero.body.y - 50, r: 12.5, e:0}
+				hero.body = {x: hero.body.x, y: hero.body.y - 100, r: 12.5, e:0}
+				//splash effect when you bounce off bottom
+				ctx.drawImage(splash, 17, 13, 40, 50, hero.body.x-17, hero.body.y, 50, 50);
 
 				}
 
@@ -437,8 +451,10 @@ var collisionDetection_Items = function(){
 	                itemsArray[i].status = 0;
 	                var frameCounter = 0;
 	                
-	                 	//booster item hit, need to determine which item is a booster item
+	                 	//booster item hit on star only
+	                 	if(i === 0){
 	                 	booster = true;
+	                 	}
 	                 	console.log("invisible");
 	                	
 	      
@@ -470,7 +486,9 @@ var restartAnimate = function(){
 	var context;
 	doAnim=true;
 	dy= 1;
-	hero.body.y = hero.body.y + 20;
+	hero.body.y = hero.body.y + 30;
+
+	
 	animateCanvas();
 
 }
