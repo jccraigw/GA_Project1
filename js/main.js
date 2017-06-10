@@ -4,6 +4,7 @@ console.log("hi");
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
+//image graphics
 var image = document.getElementById('source');
 var barrier = document.getElementById('barrier');
 var chest = document.getElementById('treasure');
@@ -21,8 +22,12 @@ var randomBottom = 0;
 var itemWidth = 50;
 var itemHeight = 50; 
 
-
+//variable to stop animation if game over
 var doAnim=true;
+
+//booster item hit detection
+var booster = false;
+var frameCounter =0;
 
 
 //HERO
@@ -59,7 +64,7 @@ var hero = {
 		}
 
 		ctx.beginPath();
-    	//ctx.drawImage(image, x * angle, y, 100,100,hero.body.x, hero.body.y, 100,100);
+    	//ctx.drawImage(image,hero.body.x-20, hero.body.y-25, 50, 50);
     	ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
     	ctx.fillStyle = "black";
     	ctx.fill();
@@ -76,7 +81,19 @@ var hero = {
 			if(hero.body.x < canvas.width - heroRadius){
 			//move the heros x position 10 to the right
 			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
-			dy=1;
+
+				//determines if booster item is hit and speeds up hero	
+				if(booster){
+					console.log('booster')
+					while(frameCounter< 600){
+					dy=4;
+					frameCounter++;
+					}
+					frameCounter= 0;
+					booster=false;
+				}else{
+			 		dy=1;
+			    }
 			}
 			//move the hero x position 10 to the left
 		}else if(hero.direction === "left"){
@@ -84,7 +101,18 @@ var hero = {
 			//keeps hero on canvas
 			if(hero.body.x > heroRadius){
 			hero.body = {x: hero.body.x - 10, y: hero.body.y, r: 10, e: 0}
-			dy=1;
+				
+				//determines if booser item is hit and speeds up hero
+				if(booster){
+					while(frameCounter< 600){
+					dy =4;
+					frameCounter++;
+					}
+					frameCounter =0;
+					booster=false;
+				}else{
+			 		dy=1;
+			    }
 			}
 		}
 	}
@@ -113,24 +141,30 @@ document.addEventListener('keydown', function(event){
 //array to hold the line obstacles that make up the level;
 //keeps a min and max for each row along the x axis
 //added random blocks for left side to add variation then randomly select one each time
-var levelArray = [{x: 0, y: 150, xMax: 250}, //0
-				  {x: 0, y: 400, xMax: 250},//1
-				  {x: 400, y: 450, xMax: 300},//2
-				  {x:150,y:300, xMax: 400},//3
-				  {x:0 , y: 500, xMax:150},//4
-				  {x:0, y:650, xMax:200}, //5  
-				  {x:200, y: 700, xMax:250}, //6
-				  {x:200, y: 700, xMax:300}, //7
-				  {x:200, y: 700, xMax:350}, //8
-				  {x:200, y: 700, xMax:400}, //9
-				  {x:200, y:550, xMax:250}, //10
-				  {x:200, y:550, xMax:300}, //11
-				  {x:200, y:550, xMax:350}, //12
-				  {x:200, y:550, xMax:400}, //13
+var levelArray = [{x: 300, y: 50, xMax: 400}, //0
+				  {x: 0, y: 100, xMax: 100},//1
+				  {x: 0, y: 200, xMax: 150},//2
+				  {x:200,y:250, xMax: 300},//3
+				  {x:0 , y: 300, xMax:150},//4
+				  {x:150, y:350, xMax:300}, //5
+				  {x:0,   y:400, xMax:200}, //6 
+				  {x:0, y:500,   xMax:150}, //7 
+				  {x:200, y:550, xMax:400}, //8
+				  {x:0, y:600, xMax:100}, //9 
+				  {x:0, y:650, xMax:250}, //10 
+				  {x:300, y:700, xMax:400}, //11    
+				  {x:200, y: 150, xMax:250}, //12
+				  {x:200, y: 150, xMax:300}, //13
+				  {x:200, y: 150, xMax:350}, //14
+				  {x:200, y: 150, xMax:400}, //15
+				  {x:200, y:450, xMax:250}, //16
+				  {x:200, y:450, xMax:300}, //17
+				  {x:200, y:450, xMax:350}, //18
+				  {x:200, y:450, xMax:400}, //19
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 290, y: 150, status: 1},
-				  {x: 60, y: 300, status: 1},
+var itemsArray = [{x: 290, y: 200, status: 1},
+				  {x: 60, y: 350, status: 1},
 				  {x: 290, y:500, status: 1},
 				  {x: 60, y: 600, status: 1}];
 
@@ -139,67 +173,50 @@ var itemsArray = [{x: 290, y: 150, status: 1},
 //might have to add argument to take values to be able to move lines up and down
 var drawLines= function(){
 
-	for(var i = 0; i < 6; i++){
+	var picOffset = 30;
+
+	for(var i = 0; i < 12; i++){
 		
-		if(i ===0){
+		if(i ===0 || i === 2 || i === 4 || i === 5 || i === 7){
 
-			drawImg(levelArray[i].x-10, levelArray[i].y-20);
-			drawImg(levelArray[i].x+20, levelArray[i].y-20);
-			drawImg(levelArray[i].x+50, levelArray[i].y-20);
-			drawImg(levelArray[i].x+80, levelArray[i].y-20);
-			drawImg(levelArray[i].x+110, levelArray[i].y-20);
-			drawImg(levelArray[i].x+140, levelArray[i].y-20);
-			drawImg(levelArray[i].x+170, levelArray[i].y-20);
-			drawImg(levelArray[i].x+200, levelArray[i].y-20);
+			//put them in for loops
+			for(var k = 0; k < 5; k++){
 
-		}else if(i === 1){
-			drawImg(levelArray[i].x-10, levelArray[i].y-20);
-			drawImg(levelArray[i].x+20, levelArray[i].y-20);
-			drawImg(levelArray[i].x+50, levelArray[i].y-20);
-			drawImg(levelArray[i].x+80, levelArray[i].y-20);
-			drawImg(levelArray[i].x+110, levelArray[i].y-20);
-			drawImg(levelArray[i].x+140, levelArray[i].y-20);
-			drawImg(levelArray[i].x+170, levelArray[i].y-20);
-			drawImg(levelArray[i].x+200, levelArray[i].y-20);
+			ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
+
+			}
+
+		}else if(i === 1 || i === 3){
+				for(var k = 0; k < 3; k++){
+
+			ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
+
+			}
 
 
-		}else if(i ===2){
-			drawImg(levelArray[i].x-50, levelArray[i].y-20);
-			drawImg(levelArray[i].x-80, levelArray[i].y-20);
-			drawImg(levelArray[i].x-110, levelArray[i].y-20);
+		}else if (i === 6 || i === 8){
+			for(var k = 0; k < 7; k++){
 
+			ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
 
-		}else if(i === 3){
-				drawImg(levelArray[i].x-10, levelArray[i].y-20);
-			drawImg(levelArray[i].x+20, levelArray[i].y-20);
-			drawImg(levelArray[i].x+50, levelArray[i].y-20);
-			drawImg(levelArray[i].x+80, levelArray[i].y-20);
-			drawImg(levelArray[i].x+110, levelArray[i].y-20);
-			drawImg(levelArray[i].x+140, levelArray[i].y-20);
-			drawImg(levelArray[i].x+170, levelArray[i].y-20);
-			drawImg(levelArray[i].x+200, levelArray[i].y-20);
+			}	
 
+		}else if (i === 9 || i === 11){
+			for(var k = 0; k < 3; k++){
 
-		}else if(i === 4){
+			ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
 
-			drawImg(levelArray[i].x-10, levelArray[i].y-20);
-			drawImg(levelArray[i].x+20, levelArray[i].y-20);
-			drawImg(levelArray[i].x+50, levelArray[i].y-20);
-				drawImg(levelArray[i].x+80, levelArray[i].y-20);
-			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+			}	
+
+		}else if (i === 10){
+			for(var k = 0; k < 8; k++){
+
+			ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
+
+			}	
 
 		}
-		else if (i === 5){
-			drawImg(levelArray[i].x-10, levelArray[i].y-20);
-			drawImg(levelArray[i].x+20, levelArray[i].y-20);
-			drawImg(levelArray[i].x+50, levelArray[i].y-20);
-			drawImg(levelArray[i].x+80, levelArray[i].y-20);
-			drawImg(levelArray[i].x+110, levelArray[i].y-20);
-				drawImg(levelArray[i].x+140, levelArray[i].y-20);
-			drawImg(levelArray[i].x+170, levelArray[i].y-20);
 
-
-		}
 		// ctx.beginPath();
 		// ctx.moveTo(levelArray[i].x, levelArray[i].y);
 		// ctx.lineTo(levelArray[i].xMax, levelArray[i].y);
@@ -211,29 +228,34 @@ var drawLines= function(){
 		
 		if(i === 0){
 
+			//put them in for loops
+			if(randomTop ===12){
+			  	for(var k = 0; k < 2; k++){
 
-			if(randomTop ===6){
-			  ctx.drawImage(barrier,levelArray[randomTop].x , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,(levelArray[randomTop].x - 10) + picOffset * k, levelArray[randomTop].y-20, 50, 50);
+
+			}	
 			  
-			}else if(randomTop ===7){
-				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
+			}else if(randomTop ===13){
+					  	for(var k = 0; k < 3; k++){
 
-			}else if(randomTop ===8){
-				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+80 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+110 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,(levelArray[randomTop].x - 10) + picOffset * k, levelArray[randomTop].y-20, 50, 50);
 
-			}else if(randomTop ===9){
-				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+80 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+110 , levelArray[randomTop].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomTop].x+130 , levelArray[randomTop].y-20 , 50, 50);
+			}
+
+			}else if(randomTop ===14){
+					  	for(var k = 0; k < 5; k++){
+
+			ctx.drawImage(barrier,(levelArray[randomTop].x - 10) + picOffset * k, levelArray[randomTop].y-20, 50, 50);
+
+			}
+
+			}else if(randomTop ===15){
+					  	for(var k = 0; k < 6; k++){
+
+			ctx.drawImage(barrier,(levelArray[randomTop].x - 10) + picOffset * k, levelArray[randomTop].y-20, 50, 50);
+
+			}
 
 			}
 			// ctx.beginPath();
@@ -244,28 +266,36 @@ var drawLines= function(){
 		}
 		else{
 
-			if(randomBottom ===10){
-			  ctx.drawImage(barrier,levelArray[randomBottom].x , levelArray[randomBottom].y-20 , 50, 50);
+			if(randomBottom ===16){
+			  for(var k = 0; k < 2; k++){
+
+			ctx.drawImage(barrier,(levelArray[randomBottom].x - 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
+
+			}	
 			  
-			}else if(randomBottom ===11){
-				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
+			}else if(randomBottom ===17){
+			  for(var k = 0; k < 3; k++){
 
-			}else if(randomBottom ===12){
-				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+80 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+110 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,(levelArray[randomBottom].x - 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
 
-			}else if(randomBottom ===13){
-				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+80 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+110 , levelArray[randomBottom].y-20 , 50, 50);
-			ctx.drawImage(barrier,levelArray[randomBottom].x+130 , levelArray[randomBottom].y-20 , 50, 50);
+			}	
+			 
+
+			}else if(randomBottom ===18){
+				  for(var k = 0; k < 5; k++){
+
+			ctx.drawImage(barrier,(levelArray[randomBottom].x - 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
+
+			}	
+			 
+
+			}else if(randomBottom ===19){
+	  			for(var k = 0; k < 6; k++){
+
+				ctx.drawImage(barrier,(levelArray[randomBottom].x - 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
+
+			}	
+			 
 
 			}
 
@@ -295,7 +325,7 @@ var drawItems = function(){
 		for(var i = 0; i < 4; i++){
 			if(itemsArray[i].status === 1){
 
-				ctx.drawImage(chest, itemsArray[i].x, itemsArray[i].y, 50, 50);
+				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 50, 50);
 				// ctx.beginPath();
 	   //          ctx.rect(itemsArray[i].x, itemsArray[i].y, itemWidth, itemHeight);
 	   //          ctx.fillStyle = "#0095DD";
@@ -314,13 +344,13 @@ var drawItems = function(){
 //random number generator function for top and bottom left lines
 var getRandomTop = function(){
 
-	randomTop= Math.floor(Math.random() * (9-6)+6);
+	randomTop= Math.floor(Math.random() * (15-12)+12);
 	
 }
 
 var getRandomBottom = function(){
 
-	randomBottom = Math.floor(Math.random()*(13-10)+ 10);
+	randomBottom = Math.floor(Math.random()*(19-16)+ 16);
 }
 
 
@@ -334,14 +364,9 @@ function collisionDetection() {
     
 			
 				//checks the array for a collison along the lines according to hero position on canvas
-				if((hero.body.y=== levelArray[0].y - heroRadius && (hero.body.x > levelArray[0].x && hero.body.x < levelArray[0].xMax))||
-				(hero.body.y=== levelArray[1].y - heroRadius && (hero.body.x > levelArray[1].x && hero.body.x < levelArray[1].xMax)) ||
+				if(checkDetection()=== true ||
 				(hero.body.y=== levelArray[randomTop].y - heroRadius && (hero.body.x > levelArray[randomTop].x && hero.body.x < levelArray[randomTop].xMax))||
-				(hero.body.y=== levelArray[randomBottom].y - heroRadius && (hero.body.x > levelArray[randomBottom].x && hero.body.x < levelArray[randomBottom].xMax))||
-				(hero.body.y=== levelArray[2].y - heroRadius && (hero.body.x > levelArray[2].x && hero.body.x < levelArray[2].xMax))||
-				(hero.body.y=== levelArray[3].y - heroRadius && (hero.body.x > levelArray[3].x && hero.body.x < levelArray[3].xMax)) ||
-				(hero.body.y=== levelArray[4].y - heroRadius && (hero.body.x > levelArray[4].x && hero.body.x < levelArray[4].xMax))||
-				(hero.body.y=== levelArray[5].y - heroRadius && (hero.body.x > levelArray[5].x && hero.body.x < levelArray[5].xMax))
+				(hero.body.y=== levelArray[randomBottom].y - heroRadius && (hero.body.x > levelArray[randomBottom].x && hero.body.x < levelArray[randomBottom].xMax))
 
 				){
 
@@ -382,6 +407,22 @@ function collisionDetection() {
 
 }
 
+var checkDetection = function(){
+
+	var check = false;
+	for(var i = 0; i < 12; i++){
+
+
+		if((hero.body.y=== levelArray[i].y - heroRadius && (hero.body.x > levelArray[i].x && hero.body.x < levelArray[i].xMax))){
+
+						check = true;
+		}
+		
+	}
+
+	return check;
+}
+
 //item collision detection
 //when it they will disappear from the board
 //loop through the items array and compare the location to the heros to determine if hit
@@ -394,6 +435,21 @@ var collisionDetection_Items = function(){
 			if(hero.body.x > itemsArray[i].x && hero.body.x < itemsArray[i].x+itemWidth && hero.body.y > itemsArray[i].y && hero.body.y < itemsArray[i].y+itemHeight) {
 	                //item hit so dont draw it
 	                itemsArray[i].status = 0;
+	                var frameCounter = 0;
+	                
+	                 	//booster item hit, need to determine which item is a booster item
+	                 	booster = true;
+	                 	console.log("invisible");
+	                	
+	      
+
+	                	
+
+	                	
+	                	
+	                	
+	                
+
 	            }
 		}
 
@@ -440,42 +496,24 @@ var animateCanvas = function() {
 	}
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    //this logic resets lines after they have moved off the canvas
-    //collsion must be detected again as lines rise
+
 
 
     collisionDetection();
-    if(levelArray[0].y === -50){
 
-    	levelArray[0].y = 700;
-    }
-       if(levelArray[1].y === -50){
+    //this logic resets lines after they have moved off the canvas
+    //collsion must be detected again as lines rise
+    for(var i = 0; i < 12; i++){
+	    if(levelArray[i].y === -50){
 
-    	levelArray[1].y = 700;
+	    	levelArray[i].y = 700;
+	    }
+	       
 
-  
-    }
-    if(levelArray[2].y === -50){
+	}
+       
 
-    	levelArray[2].y = 700;
-    }
-       if(levelArray[3].y === -50){
-
-    	levelArray[3].y = 700;
-
-  
-    }
-    if(levelArray[4].y === -50){
-
-    	levelArray[4].y = 700;
-    }
-       if(levelArray[5].y === -50){
-
-    	levelArray[5].y = 700;
-
-  
-    }
-       if(levelArray[randomTop].y === -50){
+    if(levelArray[randomTop].y === -50){
 
 
   		getRandomTop();
@@ -491,71 +529,43 @@ var animateCanvas = function() {
 
     }
 
+
+    //put in for loop
     //this logic resets items
-    if(itemsArray[0].y === -50){
+
+    for(var i = 0; i < 4; i++){
+	    if(itemsArray[i].y === -50){
 
 
-    	itemsArray[0].y = 700;
-    	if(itemsArray[0].status === 0){
+	    	itemsArray[i].y = 700;
+	    	if(itemsArray[i].status === 0){
 
-    		itemsArray[0].status = 1;
-    		drawItems();
-    	}
-    }
-       if(itemsArray[1].y === -50){
-
-
-    	itemsArray[1].y = 700;
-    	if(itemsArray[1].status === 0){
-
-    		itemsArray[1].status = 1;
-    		drawItems();
-    	}
-    }
-       if(itemsArray[2].y === -50){
-
-
-
-    	itemsArray[2].y = 700;
-    	if(itemsArray[2].status === 0){
-
-    		itemsArray[2].status = 1;
-    		drawItems();
-    	}
-    }
-     if(itemsArray[3].y === -50){
-
-
-
-    	itemsArray[3].y = 700;
-    	if(itemsArray[3].status === 0){
-
-    		itemsArray[3].status = 1;
-    		drawItems();
-    	}
-    }
+	    		itemsArray[i].status = 1;
+	    		drawItems();
+	    	}
+	    }
   
-
+	}
   
 
 
 
     //this moves the lines up the canvas
-    levelArray[0].y = levelArray[0].y - 1;
-    levelArray[1].y = levelArray[1].y - 1;
+    for(var i = 0; i < 12; i++){
+	    levelArray[i].y = levelArray[i].y - 1;
+	    
+	 }
+
     levelArray[randomTop].y = levelArray[randomTop].y - 1;
     levelArray[randomBottom].y = levelArray[randomBottom].y - 1;
-    levelArray[2].y = levelArray[2].y - 1;
-    levelArray[3].y = levelArray[3].y - 1;
-    levelArray[4].y = levelArray[4].y - 1;
-    levelArray[5].y = levelArray[5].y - 1;
 
 
     //this moves boxes up the canvas
-    itemsArray[0].y = itemsArray[0].y -1;
-    itemsArray[1].y = itemsArray[1].y -1;
-    itemsArray[2].y = itemsArray[2].y -1;
-    itemsArray[3].y = itemsArray[3].y -1;
+    for(var i = 0; i < 4; i++){
+	    itemsArray[i].y = itemsArray[i].y -1;
+   
+
+		}
     
     drawLines();
     drawItems();
