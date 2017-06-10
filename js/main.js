@@ -46,7 +46,7 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 250, y:10, r: 10, e: 0};
+		this.body = {x: 200, y:60, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
@@ -327,7 +327,7 @@ var drawItems = function(){
 		for(var i = 0; i < 4; i++){
 			if(itemsArray[i].status === 1){
 
-				if(i === 0){
+				if(i === 1){
 
 					ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,50, 50)
 				}else{
@@ -452,7 +452,7 @@ var collisionDetection_Items = function(){
 	                var frameCounter = 0;
 	                
 	                 	//booster item hit on star only
-	                 	if(i === 0){
+	                 	if(i === 1){
 	                 	booster = true;
 	                 	}
 	                 	console.log("invisible");
