@@ -6,6 +6,7 @@ var ctx = canvas.getContext('2d');
 
 var image = document.getElementById('source');
 var barrier = document.getElementById('barrier');
+var chest = document.getElementById('treasure');
 
 // //hero drop velocity 
 var dy = 1;
@@ -163,22 +164,46 @@ var drawLines= function(){
 
 
 		}else if(i ===2){
-
+			drawImg(levelArray[i].x-50, levelArray[i].y-20);
+			drawImg(levelArray[i].x-80, levelArray[i].y-20);
+			drawImg(levelArray[i].x-110, levelArray[i].y-20);
 
 
 		}else if(i === 3){
-
+				drawImg(levelArray[i].x-10, levelArray[i].y-20);
+			drawImg(levelArray[i].x+20, levelArray[i].y-20);
+			drawImg(levelArray[i].x+50, levelArray[i].y-20);
+			drawImg(levelArray[i].x+80, levelArray[i].y-20);
+			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+			drawImg(levelArray[i].x+140, levelArray[i].y-20);
+			drawImg(levelArray[i].x+170, levelArray[i].y-20);
+			drawImg(levelArray[i].x+200, levelArray[i].y-20);
 
 
 		}else if(i === 4){
 
+			drawImg(levelArray[i].x-10, levelArray[i].y-20);
+			drawImg(levelArray[i].x+20, levelArray[i].y-20);
+			drawImg(levelArray[i].x+50, levelArray[i].y-20);
+				drawImg(levelArray[i].x+80, levelArray[i].y-20);
+			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+
+		}
+		else if (i === 5){
+			drawImg(levelArray[i].x-10, levelArray[i].y-20);
+			drawImg(levelArray[i].x+20, levelArray[i].y-20);
+			drawImg(levelArray[i].x+50, levelArray[i].y-20);
+			drawImg(levelArray[i].x+80, levelArray[i].y-20);
+			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+				drawImg(levelArray[i].x+140, levelArray[i].y-20);
+			drawImg(levelArray[i].x+170, levelArray[i].y-20);
 
 
 		}
-		ctx.beginPath();
-		ctx.moveTo(levelArray[i].x, levelArray[i].y);
-		ctx.lineTo(levelArray[i].xMax, levelArray[i].y);
-		ctx.stroke();
+		// ctx.beginPath();
+		// ctx.moveTo(levelArray[i].x, levelArray[i].y);
+		// ctx.lineTo(levelArray[i].xMax, levelArray[i].y);
+		// ctx.stroke();
 	}
 
 	
@@ -211,10 +236,10 @@ var drawLines= function(){
 			ctx.drawImage(barrier,levelArray[randomTop].x+130 , levelArray[randomTop].y-20 , 50, 50);
 
 			}
-			ctx.beginPath();
-			ctx.moveTo(levelArray[randomTop].x, levelArray[randomTop].y);
-			ctx.lineTo(levelArray[randomTop].xMax, levelArray[randomTop].y);
-			ctx.stroke();
+			// ctx.beginPath();
+			// ctx.moveTo(levelArray[randomTop].x, levelArray[randomTop].y);
+			// ctx.lineTo(levelArray[randomTop].xMax, levelArray[randomTop].y);
+			// ctx.stroke();
 
 		}
 		else{
@@ -244,10 +269,10 @@ var drawLines= function(){
 
 			}
 
-			ctx.beginPath();
-			ctx.moveTo(levelArray[randomBottom].x, levelArray[randomBottom].y);
-			ctx.lineTo(levelArray[randomBottom].xMax, levelArray[randomBottom].y);
-			ctx.stroke();
+			// ctx.beginPath();
+			// ctx.moveTo(levelArray[randomBottom].x, levelArray[randomBottom].y);
+			// ctx.lineTo(levelArray[randomBottom].xMax, levelArray[randomBottom].y);
+			// ctx.stroke();
 		}
 	}
 
@@ -269,11 +294,13 @@ var drawItems = function(){
 
 		for(var i = 0; i < 4; i++){
 			if(itemsArray[i].status === 1){
-				ctx.beginPath();
-	            ctx.rect(itemsArray[i].x, itemsArray[i].y, itemWidth, itemHeight);
-	            ctx.fillStyle = "#0095DD";
-	            ctx.fill();
-	            ctx.closePath();
+
+				ctx.drawImage(chest, itemsArray[i].x, itemsArray[i].y, 50, 50);
+				// ctx.beginPath();
+	   //          ctx.rect(itemsArray[i].x, itemsArray[i].y, itemWidth, itemHeight);
+	   //          ctx.fillStyle = "#0095DD";
+	   //          ctx.fill();
+	   //          ctx.closePath();
 	        }
 
         }
