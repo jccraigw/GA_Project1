@@ -4,6 +4,9 @@ console.log("hi");
 var canvas = document.getElementById('myCanvas');
 var ctx = canvas.getContext('2d');
 
+var image = document.getElementById('source');
+var barrier = document.getElementById('barrier');
+
 // //hero drop velocity 
 var dy = 1;
 //variable to hold the heros radius to be used in collision detection
@@ -19,6 +22,7 @@ var itemHeight = 50;
 
 
 var doAnim=true;
+
 
 //HERO
 //
@@ -39,9 +43,23 @@ var hero = {
 	//draw the hero on the canvas
 	drawBody: function(){
 
+		var x = image.width/9;
+		var y = image.height;
+
+		var angle =1;;
+
+		if(hero.direction=== 'right'){
+
+				angle =3;
+
+		}else if(hero.direction === 'left'){
+			angle = 2;
+			
+		}
 
 		ctx.beginPath();
-    	ctx.arc(hero.body.x, hero.body.y, heroRadius, 0, Math.PI*2);
+    	//ctx.drawImage(image, x * angle, y, 100,100,hero.body.x, hero.body.y, 100,100);
+    	ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
     	ctx.fillStyle = "black";
     	ctx.fill();
     	ctx.closePath();
@@ -95,19 +113,19 @@ document.addEventListener('keydown', function(event){
 //keeps a min and max for each row along the x axis
 //added random blocks for left side to add variation then randomly select one each time
 var levelArray = [{x: 0, y: 150, xMax: 250}, //0
-				  {x: 0, y: 400, xMax: 250},
-				  {x: 400, y: 450, xMax: 300},
-				  {x:150,y:300, xMax: 400},
-				  {x:0 , y: 500, xMax:150},
-				  {x:0, y:650, xMax:200}, //1  
-				  {x:200, y: 700, xMax:250}, //2
-				  {x:200, y: 700, xMax:300}, //3
-				  {x:200, y: 700, xMax:350}, //4
-				  {x:200, y: 700, xMax:400}, //5
-				  {x:200, y:550, xMax:250}, //6
-				  {x:200, y:550, xMax:300}, //7
-				  {x:200, y:550, xMax:350}, //8
-				  {x:200, y:550, xMax:400}, //9
+				  {x: 0, y: 400, xMax: 250},//1
+				  {x: 400, y: 450, xMax: 300},//2
+				  {x:150,y:300, xMax: 400},//3
+				  {x:0 , y: 500, xMax:150},//4
+				  {x:0, y:650, xMax:200}, //5  
+				  {x:200, y: 700, xMax:250}, //6
+				  {x:200, y: 700, xMax:300}, //7
+				  {x:200, y: 700, xMax:350}, //8
+				  {x:200, y: 700, xMax:400}, //9
+				  {x:200, y:550, xMax:250}, //10
+				  {x:200, y:550, xMax:300}, //11
+				  {x:200, y:550, xMax:350}, //12
+				  {x:200, y:550, xMax:400}, //13
 				  ];
 //array to hold the x and y position of the items on the canvas
 var itemsArray = [{x: 290, y: 150, status: 1},
@@ -121,6 +139,42 @@ var itemsArray = [{x: 290, y: 150, status: 1},
 var drawLines= function(){
 
 	for(var i = 0; i < 6; i++){
+		
+		if(i ===0){
+
+			drawImg(levelArray[i].x-10, levelArray[i].y-20);
+			drawImg(levelArray[i].x+20, levelArray[i].y-20);
+			drawImg(levelArray[i].x+50, levelArray[i].y-20);
+			drawImg(levelArray[i].x+80, levelArray[i].y-20);
+			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+			drawImg(levelArray[i].x+140, levelArray[i].y-20);
+			drawImg(levelArray[i].x+170, levelArray[i].y-20);
+			drawImg(levelArray[i].x+200, levelArray[i].y-20);
+
+		}else if(i === 1){
+			drawImg(levelArray[i].x-10, levelArray[i].y-20);
+			drawImg(levelArray[i].x+20, levelArray[i].y-20);
+			drawImg(levelArray[i].x+50, levelArray[i].y-20);
+			drawImg(levelArray[i].x+80, levelArray[i].y-20);
+			drawImg(levelArray[i].x+110, levelArray[i].y-20);
+			drawImg(levelArray[i].x+140, levelArray[i].y-20);
+			drawImg(levelArray[i].x+170, levelArray[i].y-20);
+			drawImg(levelArray[i].x+200, levelArray[i].y-20);
+
+
+		}else if(i ===2){
+
+
+
+		}else if(i === 3){
+
+
+
+		}else if(i === 4){
+
+
+
+		}
 		ctx.beginPath();
 		ctx.moveTo(levelArray[i].x, levelArray[i].y);
 		ctx.lineTo(levelArray[i].xMax, levelArray[i].y);
@@ -133,6 +187,30 @@ var drawLines= function(){
 		if(i === 0){
 
 
+			if(randomTop ===6){
+			  ctx.drawImage(barrier,levelArray[randomTop].x , levelArray[randomTop].y-20 , 50, 50);
+			  
+			}else if(randomTop ===7){
+				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
+
+			}else if(randomTop ===8){
+				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+80 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+110 , levelArray[randomTop].y-20 , 50, 50);
+
+			}else if(randomTop ===9){
+				ctx.drawImage(barrier,levelArray[randomTop].x-10 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+20 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+50 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+80 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+110 , levelArray[randomTop].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomTop].x+130 , levelArray[randomTop].y-20 , 50, 50);
+
+			}
 			ctx.beginPath();
 			ctx.moveTo(levelArray[randomTop].x, levelArray[randomTop].y);
 			ctx.lineTo(levelArray[randomTop].xMax, levelArray[randomTop].y);
@@ -141,12 +219,47 @@ var drawLines= function(){
 		}
 		else{
 
+			if(randomBottom ===10){
+			  ctx.drawImage(barrier,levelArray[randomBottom].x , levelArray[randomBottom].y-20 , 50, 50);
+			  
+			}else if(randomBottom ===11){
+				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
+
+			}else if(randomBottom ===12){
+				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+80 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+110 , levelArray[randomBottom].y-20 , 50, 50);
+
+			}else if(randomBottom ===13){
+				ctx.drawImage(barrier,levelArray[randomBottom].x-10 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+20 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+50 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+80 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+110 , levelArray[randomBottom].y-20 , 50, 50);
+			ctx.drawImage(barrier,levelArray[randomBottom].x+130 , levelArray[randomBottom].y-20 , 50, 50);
+
+			}
+
 			ctx.beginPath();
 			ctx.moveTo(levelArray[randomBottom].x, levelArray[randomBottom].y);
 			ctx.lineTo(levelArray[randomBottom].xMax, levelArray[randomBottom].y);
 			ctx.stroke();
 		}
 	}
+
+}
+
+var drawImg = function(x, y){
+
+
+	ctx.drawImage(barrier, x, y, 50, 50);
+
+
+
 
 }
 

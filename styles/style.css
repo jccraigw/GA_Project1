@@ -1,4 +1,9 @@
 #myCanvas{
 
 	background-color: #40a4df;
+	background-image: url('../images/heather-wiggins-underwater-smaller.jpg');*/
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
