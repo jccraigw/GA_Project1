@@ -6,10 +6,13 @@ var ctx = canvas.getContext('2d');
 
 //image graphics
 var image = document.getElementById('source');
+var image_left = document.getElementById('source_left');
 var barrier = document.getElementById('barrier');
 var chest = document.getElementById('treasure');
 var splash = document.getElementById('splash');
 var boost = document.getElementById('star');
+
+
 
 // //hero drop velocity 
 var dy = 1;
@@ -51,26 +54,40 @@ var hero = {
 	//draw the hero on the canvas
 	drawBody: function(){
 
-		var x = image.width/9;
-		var y = image.height;
+		var x = 65;
 
-		var angle =1;;
+		var y = 45;
+		var frames = 9;
+		var currentFrame = 0;
+
+
+
+		
 
 		if(hero.direction=== 'right'){
 
-				angle =3;
+				
+			ctx.drawImage(image,30, 0,50,45,hero.body.x-20, hero.body.y-20, 50, 45);
+				
 
 		}else if(hero.direction === 'left'){
-			angle = 2;
 			
-		}
+			
+			ctx.drawImage(image_left,0, 0,65,45,hero.body.x-20, hero.body.y-20, 65, 45);
+			
+		}else{
 
-		ctx.beginPath();
-    	//ctx.drawImage(image,hero.body.x-20, hero.body.y-25, 50, 50);
-    	ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
-    	ctx.fillStyle = "black";
-    	ctx.fill();
-    	ctx.closePath();
+			ctx.drawImage(image,0, 0,30,45,hero.body.x-20, hero.body.y-20, 30, 30);
+		}
+			
+		
+			
+			
+    	//ctx.drawImage(image,0, 0,30,45,hero.body.x-20, hero.body.y-20, 30, 30);
+    	//ctx.arc(hero.body.x, hero.body.y, 10, 0, Math.PI*2);
+    	//ctx.fillStyle = "black";
+    	//ctx.fill();
+    	//ctx.closePath();
 
 	},
 	//move is based off left and right movements only
@@ -486,7 +503,7 @@ var restartAnimate = function(){
 	var context;
 	doAnim=true;
 	dy= 1;
-	hero.body.y = hero.body.y + 30;
+	hero.body.y = hero.body.y + 100;
 
 	
 	animateCanvas();
