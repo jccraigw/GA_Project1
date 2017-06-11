@@ -12,6 +12,7 @@ var chest = document.getElementById('treasure');
 var splash = document.getElementById('splash');
 var boost = document.getElementById('star');
 var dead = document.getElementById('dead_scuba');
+var shark = document.getElementById('shark');
 var state = false;
 
 
@@ -47,7 +48,7 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 200, y:60, r: 10, e: 0};
+		this.body = {x: 200, y:100, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
@@ -165,8 +166,8 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 //array to hold the x and y position of the items on the canvas
 var itemsArray = [{x: 300, y: 200, status: 1},
 				  {x: 50,  y: 350, status: 1},
-				  {x: 300, y: 500, status: 1},
-				  {x: 50,  y: 600, status: 1}];
+				  {x: 200, y: 700, status: 1},
+				  {x: 390,  y: 600, status: 1}];
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -296,6 +297,10 @@ var drawItems = function(){
 
 			if(i === 1){
 				ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
+			}else if(i ===3){
+
+				ctx.drawImage(shark,  itemsArray[i].x, itemsArray[i].y, 40, 40);
+
 			}else{
 				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 40, 40);
 			}
@@ -499,6 +504,11 @@ var animateCanvas = function() {
 	    }
 	}
   
+  	//resets shark to right
+  	if(itemsArray[3].x=== 0){
+  		itemsArray[3].x = 390;
+
+  	}
 
 
 
@@ -519,6 +529,9 @@ var animateCanvas = function() {
 	    itemsArray[i].y = itemsArray[i].y -1;
    
 	}
+
+	//moves shark right to left
+	itemsArray[3].x = itemsArray[3].x - 1;
     
     drawLines();
     drawItems();
