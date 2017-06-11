@@ -11,6 +11,8 @@ var barrier = document.getElementById('barrier');
 var chest = document.getElementById('treasure');
 var splash = document.getElementById('splash');
 var boost = document.getElementById('star');
+var dead = document.getElementById('dead_scuba');
+var state = false;
 
 
 
@@ -64,23 +66,32 @@ var hero = {
 
 		
 
-		if(hero.direction=== 'right'){
+		if(state === true){
+			
+			ctx.drawImage(dead,525, 0,60,45,hero.body.x-20, hero.body.y-25, 60, 45);
+	
+			
+
+		}else if(hero.direction=== 'right'){
 
 				
-			ctx.drawImage(image,30, 0,50,45,hero.body.x-20, hero.body.y-20, 50, 45);
+			ctx.drawImage(image,30, 0,50,45,hero.body.x-20, hero.body.y-25, 50, 45);
+
 				
 
 		}else if(hero.direction === 'left'){
 			
 			
-			ctx.drawImage(image_left,0, 0,65,45,hero.body.x-20, hero.body.y-20, 65, 45);
-			
-		}else{
-
-			ctx.drawImage(image,0, 0,30,45,hero.body.x-20, hero.body.y-20, 30, 30);
-		}
+			ctx.drawImage(image_left,0, 0,65,45,hero.body.x-20, hero.body.y-25, 65, 45);
 			
 		
+		}else{
+
+			ctx.drawImage(image,0, 0,35,45,hero.body.x-20, hero.body.y-25, 35, 45);	
+
+		}
+			
+				
 			
 			
     	//ctx.drawImage(image,0, 0,30,45,hero.body.x-20, hero.body.y-20, 30, 30);
@@ -402,14 +413,19 @@ function collisionDetection() {
 					else if(hero.body.y ===heroRadius){
 						//you lose when you touch between the top and a line
 						//game stops
+
 						dy = 0;
+						
+						state= true;
+
 						doAnim=false;
 
 
 						//delay restart to give time to reset
 						//testing if this is where i can display message
 						console.log("in collisionDetection");
-
+						ctx.clearRect(0, 0, canvas.width, canvas.height);
+						
 						//	alert('GAME OVER');
 
 						setTimeout(restartAnimate, 5000);
@@ -504,6 +520,7 @@ var restartAnimate = function(){
 	doAnim=true;
 	dy= 1;
 	hero.body.y = hero.body.y + 100;
+	state= false;
 
 	
 	animateCanvas();
@@ -522,6 +539,7 @@ var clearCanvas = function(){
 var animateCanvas = function() {
 
 	//stops the animation and returns nothing
+	hero.drawBody();
 	if(!doAnim){
 		
 		setTimeout(clearCanvas, 1000);		
