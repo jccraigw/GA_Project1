@@ -175,7 +175,7 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  {x: 0,    y: 400,  xMax: 200}, //6 
 				  {x: 0,    y: 520,  xMax: 150}, //7 
 				  {x: 200,  y: 550,  xMax: 400}, //8
-				  {x: 100,  y: 600,  xMax: 100}, //9//not being detected 
+				  {x: 150,  y: 750,  xMax: 250}, //9//not being detected 
 				  {x: 0,    y: 650,  xMax: 250}, //10 
 				  {x: 300,  y: 700,  xMax: 400}, //11    
 				  {x: 200,  y: 150,  xMax: 250}, //12
