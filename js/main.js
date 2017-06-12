@@ -48,7 +48,7 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 200, y:100, r: 10, e: 0};
+		this.body = {x: 250, y:100, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
@@ -164,10 +164,16 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  {x: 200,  y: 450,  xMax: 400}, //19
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 300, y: 200, status: 1},
-				  {x: 50,  y: 350, status: 1},
+var itemsArray = [{x: 250, y: 200, status: 1},
+				  {x: 50,  y: 350, status: 1},//star
 				  {x: 200, y: 700, status: 1},
-				  {x: 390,  y: 600, status: 1}];
+				  {x: 390, y: 600, status: 1},//shark
+				  {x: 390, y: 350, status: 1},//shark
+				  {x: 390, y: 100, status: 1},//shark
+				  {x: 50, y: 450, status: 1},
+				  {x: 200, y: 400, status: 1},
+				  {x: 350, y: 0, status: 1},
+				  {x: 350,  y: 500, status: 1}];//star
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -291,13 +297,13 @@ var drawLines= function(){
 //if the status is 1 then the brick hasnt been hit and can be drawn
 var drawItems = function(){
 
-	for(var i = 0; i < 4; i++){
+	for(var i = 0; i < 10; i++){
 		
 		if(itemsArray[i].status === 1){
 
-			if(i === 1){
+			if(i === 1 || i ===9){
 				ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
-			}else if(i ===3){
+			}else if(i ===3 || i === 4 || i ===5){
 
 				ctx.drawImage(shark,  itemsArray[i].x, itemsArray[i].y, 40, 40);
 
@@ -399,7 +405,7 @@ var checkDetection = function(){
 var collisionDetection_Items = function(){
 
 
-	for(var i = 0; i < 4; i++){
+	for(var i = 0; i < 10; i++){
 		//if hero hits item then dont draw item on screen
 		if(itemsArray[i].status === 1){
 			
@@ -409,7 +415,7 @@ var collisionDetection_Items = function(){
                 var frameCounter = 0;
                 
                  //booster item hit on star only
-                 if(i === 1){
+                 if(i === 1 || i === 9){
                  	booster = true;
                  }
                  console.log("invisible");
@@ -491,7 +497,7 @@ var animateCanvas = function() {
     //put in for loop
     //this logic resets items
 
-    for(var i = 0; i < 4; i++){
+    for(var i = 0; i < 10; i++){
 	    if(itemsArray[i].y === -50){
 
 	    	itemsArray[i].y = 700;
@@ -509,6 +515,14 @@ var animateCanvas = function() {
   		itemsArray[3].x = 390;
 
   	}
+  	if(itemsArray[4].x=== 0){
+  		itemsArray[4].x = 390;
+
+  	}
+  	if(itemsArray[5].x=== 0){
+  		itemsArray[5].x = 390;
+
+  	}
 
 
 
@@ -524,7 +538,7 @@ var animateCanvas = function() {
 
 
     //this moves boxes up the canvas
-    for(var i = 0; i < 4; i++){
+    for(var i = 0; i < 10; i++){
 	    
 	    itemsArray[i].y = itemsArray[i].y -1;
    
@@ -532,6 +546,8 @@ var animateCanvas = function() {
 
 	//moves shark right to left
 	itemsArray[3].x = itemsArray[3].x - 1;
+	itemsArray[4].x = itemsArray[4].x - 1;
+	itemsArray[5].x = itemsArray[5].x - 1;
     
     drawLines();
     drawItems();
