@@ -188,16 +188,16 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  {x: 200,  y: 450,  xMax: 400}, //19
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 250, y: 210, status: 1},
-				  {x: 50,  y: 360, status: 1},//star
-				  {x: 200, y: 710, status: 1},
+var itemsArray = [{x: 250, y: 220, status: 1},
+				  {x: 50,  y: 370, status: 1},//star
+				  {x: 200, y: 720, status: 1},
 				  {x: 390, y: 600, status: 1},//shark
 				  {x: 390, y: 300, status: 1},//shark
 				  {x: 390, y: 100, status: 1},//shark
-				  {x: 50, y: 480, status: 1},
-				  {x: 200, y: 410, status: 1},
-				  {x: 350, y: 10, status: 1},
-				  {x: 350,  y: 510, status: 1}];//star
+				  {x: 50, y: 490, status: 1},
+				  {x: 200, y: 420, status: 1},
+				  {x: 350, y: 20, status: 1},
+				  {x: 350,  y: 520, status: 1}];//star
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -327,13 +327,13 @@ var drawItems = function(){
 
 			if(i === 1 || i ===9){
 				//ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
-				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 40, 40);
+				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 30, 30);
 			}else if(i ===3 || i === 4 || i ===5){
 
 				ctx.drawImage(shark,  itemsArray[i].x, itemsArray[i].y, 40, 40);
 
 			}else{
-				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 40, 40);
+				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 30, 30);
 			}
 
 	    }
@@ -535,15 +535,15 @@ var animateCanvas = function() {
 	}
   
   	//resets shark to right
-  	if(itemsArray[3].x=== 0){
+  	if(itemsArray[3].x < 0){
   		itemsArray[3].x = 390;
 
   	}
-  	if(itemsArray[4].x=== 0){
+  	if(itemsArray[4].x < 0){
   		itemsArray[4].x = 390;
 
   	}
-  	if(itemsArray[5].x=== 0){
+  	if(itemsArray[5].x < 0){
   		itemsArray[5].x = 390;
 
   	}
@@ -568,10 +568,26 @@ var animateCanvas = function() {
    
 	}
 
+	//once you hit 10 score sharks start going faster
+	if(score < 15){
 	//moves shark right to left
-	itemsArray[3].x = itemsArray[3].x - 1;
-	itemsArray[4].x = itemsArray[4].x - 1;
-	itemsArray[5].x = itemsArray[5].x - 1;
+		itemsArray[3].x = itemsArray[3].x - 1;
+		itemsArray[4].x = itemsArray[4].x - 1;
+		itemsArray[5].x = itemsArray[5].x - 1;
+	}else if(score >=15 && score > 30){
+
+
+		itemsArray[3].x = itemsArray[3].x - 2;
+		itemsArray[4].x = itemsArray[4].x - 2;
+		itemsArray[5].x = itemsArray[5].x - 2;
+
+	}else {
+
+
+		itemsArray[3].x = itemsArray[3].x - 3;
+		itemsArray[4].x = itemsArray[4].x - 3;
+		itemsArray[5].x = itemsArray[5].x - 3;
+	}
     
     drawLines();
     drawItems();
