@@ -7,3 +7,8 @@
   -o-background-size: cover;
   background-size: cover;
 }
+.score{
+
+	color: white;
+	font-size: 12px;
+}

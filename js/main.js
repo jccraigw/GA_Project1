@@ -15,6 +15,8 @@ var dead = document.getElementById('dead_scuba');
 var shark = document.getElementById('shark');
 var state = false;
 
+var health = 3;
+var score = 0;
 
 
 // //hero drop velocity 
@@ -33,6 +35,28 @@ var doAnim=true;
 var booster = false;
 var frameCounter =0;
 
+//HEALTH & SCOREBOARD
+//
+//
+var healthDisplay = function(){
+	ctx.fillStyle = "rgba(255,255,255, 0.9)";
+	ctx.font = "bold 14px Arial";
+	ctx.fillText("Life Remaining: "+health, 30, 20);
+}
+
+var scoreBoard = function(){
+
+	ctx.fillStyle = "rgba(255,255,255, 0.9)";
+	ctx.font = "bold 14px Arial";
+	ctx.fillText("Score: "+score, 300, 20);
+}
+
+var gameOverDisplay = function(){
+
+	ctx.fillStyle = "rgba(255,255,255, 0.9)";
+	ctx.font = "bold 24px Arial";
+	ctx.fillText("GAME OVER", 30, 100);
+}
 
 //HERO
 //
@@ -48,7 +72,7 @@ var hero = {
 	//create the staring point for the hero
 	initHero: function(){
 
-		this.body = {x: 250, y:100, r: 10, e: 0};
+		this.body = {x: 250, y:150, r: 10, e: 0};
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
@@ -149,9 +173,9 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  {x: 0 ,   y: 300,  xMax: 150}, //4
 				  {x: 150,  y: 350,  xMax: 300}, //5
 				  {x: 0,    y: 400,  xMax: 200}, //6 
-				  {x: 0,    y: 500,  xMax: 150}, //7 
+				  {x: 0,    y: 520,  xMax: 150}, //7 
 				  {x: 200,  y: 550,  xMax: 400}, //8
-				  {x: 0,    y: 600,  xMax: 100}, //9 
+				  {x: 100,  y: 600,  xMax: 100}, //9//not being detected 
 				  {x: 0,    y: 650,  xMax: 250}, //10 
 				  {x: 300,  y: 700,  xMax: 400}, //11    
 				  {x: 200,  y: 150,  xMax: 250}, //12
@@ -164,16 +188,16 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  {x: 200,  y: 450,  xMax: 400}, //19
 				  ];
 //array to hold the x and y position of the items on the canvas
-var itemsArray = [{x: 250, y: 200, status: 1},
-				  {x: 50,  y: 350, status: 1},//star
-				  {x: 200, y: 700, status: 1},
+var itemsArray = [{x: 250, y: 210, status: 1},
+				  {x: 50,  y: 360, status: 1},//star
+				  {x: 200, y: 710, status: 1},
 				  {x: 390, y: 600, status: 1},//shark
-				  {x: 390, y: 350, status: 1},//shark
+				  {x: 390, y: 300, status: 1},//shark
 				  {x: 390, y: 100, status: 1},//shark
-				  {x: 50, y: 450, status: 1},
-				  {x: 200, y: 400, status: 1},
-				  {x: 350, y: 0, status: 1},
-				  {x: 350,  y: 500, status: 1}];//star
+				  {x: 50, y: 480, status: 1},
+				  {x: 200, y: 410, status: 1},
+				  {x: 350, y: 10, status: 1},
+				  {x: 350,  y: 510, status: 1}];//star
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -302,7 +326,8 @@ var drawItems = function(){
 		if(itemsArray[i].status === 1){
 
 			if(i === 1 || i ===9){
-				ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
+				//ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
+				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 40, 40);
 			}else if(i ===3 || i === 4 || i ===5){
 
 				ctx.drawImage(shark,  itemsArray[i].x, itemsArray[i].y, 40, 40);
@@ -353,19 +378,7 @@ function collisionDetection() {
 			hero.body = {x: hero.body.x, y: hero.body.y - 2, r: 12.5, e:0}
 
 		}
-		else if(hero.body.y ===heroRadius){
-			//you lose when you touch between the top and a line
-			//game stops
-			dy = 0;	
-			state= true;
-			doAnim=false;
-			//delay restart to give time to reset
-			//testing if this is where i can display message
-			console.log("in collisionDetection");
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			//	alert('GAME OVER');
-			setTimeout(restartAnimate, 5000);
-		}
+		
 			console.log('detection');
 
 	}else{
@@ -413,10 +426,21 @@ var collisionDetection_Items = function(){
 	                //item hit so dont draw it
                 itemsArray[i].status = 0;
                 var frameCounter = 0;
+                if((i === 3 || i === 4 || i === 5) && state != true){
+
+                	health-=1;
+                }
+
+                if((i === 0 || i === 2 || i === 6 || i === 7 || i === 8)  && state != true){
+
+                	score+=1;
+                }
                 
                  //booster item hit on star only
                  if(i === 1 || i === 9){
-                 	booster = true;
+
+                 	//ctx.drawImage(splash, 17, 13, 40, 50, hero.body.x-17, hero.body.y, 50, 50);
+                 	//booster = true;
                  }
                  console.log("invisible");
 
@@ -440,7 +464,7 @@ var restartAnimate = function(){
 	var context;
 	doAnim=true;
 	dy= 1;
-	hero.body.y = hero.body.y + 100;
+	
 	state= false;
 	animateCanvas();
 
@@ -551,6 +575,35 @@ var animateCanvas = function() {
     
     drawLines();
     drawItems();
+    healthDisplay();
+    scoreBoard();
+    //display game over message
+    if(health <= 0){
+
+    	gameOverDisplay();
+    	dy = 0;	
+		state= true;
+		
+    }
+
+    if(hero.body.y ===heroRadius){
+			//you lose when you touch between the top and a line
+			//game stops
+			dy = 0;	
+			state= true;
+			
+			//delay restart to give time to reset
+			//testing if this is where i can display message
+			console.log("in collisionDetection");
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			//	alert('GAME OVER');
+			healthDisplay();
+			scoreBoard();
+			gameOverDisplay();
+		
+			
+			
+		}
      
 	//places hero on the board
     hero.drawBody();
