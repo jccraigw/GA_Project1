@@ -214,8 +214,8 @@ var itemsArray = [{x: 250, y: 220, status: 1},
 				  {x: 390, y: 600, status: 1},//shark
 				  {x: 390, y: 300, status: 1},//shark
 				  {x: 390, y: 100, status: 1},//shark
-				  {x: 50, y: 490, status: 1},
-				  {x: 200, y: 420, status: 1},
+				  {x: 50,  y: 490, status: 1},
+				  {x: 220, y: 420, status: 1},
 				  {x: 350, y: 20, status: 1},
 				  {x: 350,  y: 520, status: 1}];//
 
@@ -241,18 +241,25 @@ var drawLines= function(){
 				ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
 			}
 
-		}else if (i === 6 || i === 8){
+		}else if (i === 6){
 			
 			for(var k = 0; k < 7; k++){
 
 				ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
 			}	
 
+		}else if(i === 8){
+
+			for(var k = 0; k < 7; k++){
+
+				ctx.drawImage(barrier,(levelArray[i].x + 10) + picOffset * k, levelArray[i].y-20, 50, 50);
+			}	
+
 		}else if (i === 9 || i === 11){
 			
 			for(var k = 0; k < 3; k++){
 
-				ctx.drawImage(barrier,(levelArray[i].x - 10) + picOffset * k, levelArray[i].y-20, 50, 50);
+				ctx.drawImage(barrier,(levelArray[i].x + 10) + picOffset * k, levelArray[i].y-20, 50, 50);
 			}	
 
 		}else if (i === 10){
@@ -301,9 +308,9 @@ var drawLines= function(){
 
 			if(randomBottom ===16){
 			  
-				for(var k = 0; k < 2; k++){
+				for(var k = 0; k < 1	; k++){
 
-					ctx.drawImage(barrier,(levelArray[randomBottom].x - 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
+					ctx.drawImage(barrier,(levelArray[randomBottom].x + 10) + picOffset * k, levelArray[randomBottom].y-20, 50, 50);
 				}	
 
 			}else if(randomBottom ===17){
@@ -472,58 +479,13 @@ var collisionDetection_Items = function(){
 //function to draw game and animate it 
 //calls blocks and hero 
 //hero drops at a constant velocity
-//restart the animate after it stops when the hero is between line and top wall
-var restartAnimate = function(){
-
-
-	var context;
-	doAnim=true;
-	dy= 1;
-	
-	state= false;
-	animateCanvas();
-
-}
-
-
 //function to clear the canvas
-var clearCanvas = function(){
 
-	ctx.clearRect(0,0, canvas.width, canvas.height);
-}
+//this logic resets lines after they have moved off the canvas
+//collsion must be detected again as lines rise
+var resetLines = function(){
 
-
-
-var animateCanvas = function() {
-
-	
-	
-
-    // add listener function to loop on end
-	if(!sound){
-		loop();
-	}
-	
-	audio.addEventListener("ended", loop, false);	
-		
-	
-	hero.drawBody();
-	
-	//stops the animation and returns nothing
-	if(!doAnim){
-		
-		setTimeout(clearCanvas, 1000);		
-		context=null; 
-		return;
-
-	}
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    collisionDetection();
-
-    //this logic resets lines after they have moved off the canvas
-    //collsion must be detected again as lines rise
-    for(var i = 0; i < 12; i++){
+	for(var i = 0; i < 12; i++){
 	    if(levelArray[i].y === -50){
 
 	    	levelArray[i].y = 700;
@@ -544,25 +506,32 @@ var animateCanvas = function() {
 
     }
 
+}
 
-    //put in for loop
-    //this logic resets items
+//this logic resets items
+var resetItems = function(){
 
-    for(var i = 0; i < 10; i++){
+
+	for(var i = 0; i < 10; i++){
 	    if(itemsArray[i].y === -50){
 
 	    	itemsArray[i].y = 700;
 	    	
-		    if(itemsArray[i].status === 0){
+			if(itemsArray[i].status === 0){
 
-		    	itemsArray[i].status = 1;
-		    		drawItems();
-		    }
+			    	itemsArray[i].status = 1;
+			    		drawItems();
+			}
 	    }
 	}
-  
-  	//resets shark to right
-  	if(itemsArray[3].x < 0){
+
+
+}
+
+//resets shark to right
+var resetSharks = function(){
+
+	if(itemsArray[3].x < 0){
   		itemsArray[3].x = 390;
 
   	}
@@ -576,9 +545,12 @@ var animateCanvas = function() {
   	}
 
 
+}
 
-    //this moves the lines up the canvas
-    for(var i = 0; i < 12; i++){
+//this moves the lines up the canvas
+var moveLinesUp = function(){
+
+	for(var i = 0; i < 12; i++){
 	    
 	    levelArray[i].y = levelArray[i].y - 1;
 	    
@@ -588,20 +560,28 @@ var animateCanvas = function() {
     levelArray[randomBottom].y = levelArray[randomBottom].y - 1;
 
 
-    //this moves boxes up the canvas
-    for(var i = 0; i < 10; i++){
+}
+
+//this moves boxes up the canvas
+var moveBoxesUp = function(){
+
+
+	for(var i = 0; i < 10; i++){
 	    
 	    itemsArray[i].y = itemsArray[i].y -1;
    
 	}
+}
 
-	//once you hit 10 score sharks start going faster
-	if(score < 15){
-	//moves shark right to left
+//intervals of 15 score points cause sharks to start going faster
+var enrageSharks = function(){
+
+		if(score < 15){
+	
 		itemsArray[3].x = itemsArray[3].x - 1;
 		itemsArray[4].x = itemsArray[4].x - 1;
 		itemsArray[5].x = itemsArray[5].x - 1;
-	}else if(score >=15 && score > 30){
+	}else if(score >=15 && score < 30){
 
 
 		itemsArray[3].x = itemsArray[3].x - 2;
@@ -615,13 +595,13 @@ var animateCanvas = function() {
 		itemsArray[4].x = itemsArray[4].x - 3;
 		itemsArray[5].x = itemsArray[5].x - 3;
 	}
-    
-    drawLines();
-    drawItems();
-    healthDisplay();
-    scoreBoard();
-    //display game over message
-    if(health <= 0){
+
+
+}
+//check player health and display game over if life at 0
+var checkHealth = function(){
+
+	if(health <= 0){
 
     	gameOverDisplay();
     	dy = 0;	
@@ -629,34 +609,64 @@ var animateCanvas = function() {
 		
     }
 
-    if(hero.body.y ===heroRadius){
-			//you lose when you touch between the top and a line
-			//game stops
-			dy = 0;	
-			state= true;
-			
-			//delay restart to give time to reset
-			//testing if this is where i can display message
-			console.log("in collisionDetection");
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
-			//	alert('GAME OVER');
-			healthDisplay();
-			scoreBoard();
-			gameOverDisplay();
+}
+
+//checks if you are between the top and a line
+var checkDeathPosition = function(){
+
+
+	if(hero.body.y ===heroRadius){
+		//you lose when you touch between the top and a line
+		//game stops
+		dy = 0;	
+		state= true;
 		
-			
-			
-		}
-     
-	//places hero on the board
+		//delay restart to give time to reset
+		//testing if this is where i can display message
+		console.log("in collisionDetection");
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
+		//	alert('GAME OVER');
+		healthDisplay();
+		scoreBoard();
+		gameOverDisplay();
+
+		
+		
+	}
+}
+
+var animateCanvas = function() {
+
+
+    // add listener function to loop on ended
+	if(!sound){
+		loop();
+	}
+	
+	audio.addEventListener("ended", loop, false);	
+		
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
+    collisionDetection(); 
+   	collisionDetection_Items();
+    drawLines();
+    drawItems();
     hero.drawBody();
-  	collisionDetection();
- 
-    collisionDetection_Items();
-     //constant drop added to hero
+    healthDisplay();
+    scoreBoard();
+    resetLines();
+    resetItems();
+    resetSharks();
+    moveLinesUp();
+    moveBoxesUp();
+    enrageSharks();
+    checkHealth();
+    checkDeathPosition();
+	hero.drawBody();
+
+    //constant drop added to hero
     hero.body.y += dy;
  
-    
     window.requestAnimationFrame(animateCanvas);
 }
 
