@@ -22,7 +22,7 @@ var score = 0;
 //audio
 var audio = document.getElementById("audio");
 audio.src = "audio/soundtrack.wav";
-var sound = 1;
+var sound = 0;
                 
 function loop() {
     audio.play();
