@@ -19,6 +19,28 @@ var health = 3;
 var score = 0;
 
 
+//audio
+var audio = document.getElementById("audio");
+audio.src = "audio/soundtrack.wav";
+var sound = 1;
+                
+function loop() {
+    audio.play();
+}
+       
+       
+
+        function soundToggle() {
+            if (!sound) {
+                audio.load();
+                sound = 1;
+                button.value = "Sounds OFF";
+            } else {
+                sound = 0;
+                button.value = "Sounds ON";
+            }
+        }
+
 // //hero drop velocity 
 var dy = 1;
 //variable to hold the heros radius to be used in collision detection
@@ -76,6 +98,7 @@ var hero = {
 	},
 	//draw the hero on the canvas
 	drawBody: function(){
+	
 
 		if(state === true){
 			
@@ -83,7 +106,8 @@ var hero = {
 
 		}else if(hero.direction=== 'right'){
 
-			ctx.drawImage(image,30, 0,50,45,hero.body.x-20, hero.body.y-25, 50, 45);		
+			ctx.drawImage(image,30, 0,50,45,hero.body.x-20, hero.body.y-25, 50, 45);
+
 
 		}else if(hero.direction === 'left'){
 				
@@ -481,8 +505,20 @@ var clearCanvas = function(){
 
 var animateCanvas = function() {
 
-	//stops the animation and returns nothing
+	
+	
+
+    // add listener function to loop on end
+	if(!sound){
+		loop();
+	}
+	
+	audio.addEventListener("ended", loop, false);	
+		
+	
 	hero.drawBody();
+	
+	//stops the animation and returns nothing
 	if(!doAnim){
 		
 		setTimeout(clearCanvas, 1000);		
