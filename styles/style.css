@@ -32,7 +32,7 @@ body{
 
 
 
-	width: 150px;
+	width: 160px;
 	margin-left: 10px;
 }
 h1{
@@ -56,7 +56,7 @@ h3{
 	color: #ffffff;
 }
 .btn {
- background: #7a7077;
+  background: #7a7077;
   background-image: -webkit-linear-gradient(top, #7a7077, #7a7077);
   background-image: -moz-linear-gradient(top, #7a7077, #7a7077);
   background-image: -ms-linear-gradient(top, #7a7077, #7a7077);
@@ -75,12 +75,12 @@ h3{
   border: solid #807b7e 2px;
   text-decoration: none;
   margin-top: 20px;
-  width: 140px;
+  width: 150px;
 
 }
 
 .btn:hover {
-    background: #bfb8bd;
+  background: #bfb8bd;
   background-image: -webkit-linear-gradient(top, #bfb8bd, #bfb8bd);
   background-image: -moz-linear-gradient(top, #bfb8bd, #bfb8bd);
   background-image: -ms-linear-gradient(top, #bfb8bd, #bfb8bd);
@@ -106,7 +106,7 @@ li{
 
 }
 #button{
-   background: #7a7077;
+  background: #7a7077;
   background-image: -webkit-linear-gradient(top, #7a7077, #7a7077);
   background-image: -moz-linear-gradient(top, #7a7077, #7a7077);
   background-image: -ms-linear-gradient(top, #7a7077, #7a7077);
@@ -125,12 +125,12 @@ li{
   border: solid #807b7e 2px;
   text-decoration: none;
   margin-top: 20px;
-  width: 140px;
+  width: 150px;
 
 
 }
 #button:hover{
-      background: #bfb8bd;
+  background: #bfb8bd;
   background-image: -webkit-linear-gradient(top, #bfb8bd, #bfb8bd);
   background-image: -moz-linear-gradient(top, #bfb8bd, #bfb8bd);
   background-image: -ms-linear-gradient(top, #bfb8bd, #bfb8bd);
@@ -138,4 +138,8 @@ li{
   background-image: linear-gradient(to bottom, #bfb8bd, #bfb8bd);
   text-decoration: none;
 
+}
+#button:focus{
+
+  outline:none;
 }

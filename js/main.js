@@ -10,7 +10,7 @@ var image_left = document.getElementById('source_left');
 var barrier = document.getElementById('barrier');
 var chest = document.getElementById('treasure');
 var splash = document.getElementById('splash');
-var boost = document.getElementById('star');
+
 var dead = document.getElementById('dead_scuba');
 var shark = document.getElementById('shark');
 var state = false;
@@ -23,23 +23,35 @@ var score = 0;
 var audio = document.getElementById("audio");
 audio.src = "audio/soundtrack.wav";
 var sound = 0;
+
+var effects = document.getElementById("effects");
+effects.src = "audio/items.mp3";
+var soundEffects = 0;
+
+var playEffect = function(){
+
+	effects.play();
+}
                 
-function loop() {
+var loop = function () {
     audio.play();
 }
        
        
+var soundToggle = function() {
+    if (!sound && !soundEffects) {
+        audio.load();
+        effects.load();
+        sound = 1;
+        soundEffects = 1;
 
-        function soundToggle() {
-            if (!sound) {
-                audio.load();
-                sound = 1;
-                button.value = "Sounds OFF";
-            } else {
-                sound = 0;
-                button.value = "Sounds ON";
-            }
-        }
+        button.value = "Sounds OFF";
+    } else {
+        sound = 0;
+        soundEffects = 0;
+        button.value = "Sounds ON";
+    }
+}
 
 // //hero drop velocity 
 var dy = 1;
@@ -53,8 +65,7 @@ var itemWidth = 50;
 var itemHeight = 50; 
 //variable to stop animation if game over
 var doAnim=true;
-//booster item hit detection
-var booster = false;
+
 var frameCounter =0;
 
 //HEALTH & SCOREBOARD
@@ -129,21 +140,13 @@ var hero = {
 
 			//keeps hero on canvas
 			if(hero.body.x < canvas.width - heroRadius){
-			//move the heros x position 10 to the right
-			hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
+				//move the heros x position 10 to the right
+				hero.body = {x: hero.body.x + 10, y: hero.body.y, r: 10, e: 0}
 
-				//determines if booster item is hit and speeds up hero	
-				if(booster){
-					console.log('booster')
-					while(frameCounter< 600){
-					dy=4;
-					frameCounter++;
-					}
-					frameCounter= 0;
-					booster=false;
-				}else{
+				
+				
 			 		dy=1;
-			    }
+			    
 			}
 			//move the hero x position 10 to the left
 			}else if(hero.direction === "left"){
@@ -153,16 +156,9 @@ var hero = {
 				hero.body = {x: hero.body.x - 10, y: hero.body.y, r: 10, e: 0}
 				
 				//determines if booser item is hit and speeds up hero
-				if(booster){
-					while(frameCounter< 600){
-					dy =4;
-					frameCounter++;
-					}
-					frameCounter =0;
-					booster=false;
-				}else{
+				
 			 		dy=1;
-			    }
+			    
 			}
 		}
 	}
@@ -213,7 +209,7 @@ var levelArray = [{x: 300,  y: 50,   xMax: 400}, //0
 				  ];
 //array to hold the x and y position of the items on the canvas
 var itemsArray = [{x: 250, y: 220, status: 1},
-				  {x: 50,  y: 370, status: 1},//star
+				  {x: 50,  y: 370, status: 1},//
 				  {x: 200, y: 720, status: 1},
 				  {x: 390, y: 600, status: 1},//shark
 				  {x: 390, y: 300, status: 1},//shark
@@ -221,7 +217,7 @@ var itemsArray = [{x: 250, y: 220, status: 1},
 				  {x: 50, y: 490, status: 1},
 				  {x: 200, y: 420, status: 1},
 				  {x: 350, y: 20, status: 1},
-				  {x: 350,  y: 520, status: 1}];//star
+				  {x: 350,  y: 520, status: 1}];//
 
 //function to draw the game board on the canvas
 //draws four lines that will later move
@@ -349,10 +345,8 @@ var drawItems = function(){
 		
 		if(itemsArray[i].status === 1){
 
-			if(i === 1 || i ===9){
-				//ctx.drawImage(boost, itemsArray[i].x, itemsArray[i].y,40, 40)
-				ctx.drawImage(chest,  itemsArray[i].x, itemsArray[i].y, 30, 30);
-			}else if(i ===3 || i === 4 || i ===5){
+			
+			if(i ===3 || i === 4 || i ===5){
 
 				ctx.drawImage(shark,  itemsArray[i].x, itemsArray[i].y, 40, 40);
 
@@ -403,7 +397,7 @@ function collisionDetection() {
 
 		}
 		
-			console.log('detection');
+			
 
 	}else{
 
@@ -455,19 +449,16 @@ var collisionDetection_Items = function(){
                 	health-=1;
                 }
 
-                if((i === 0 || i === 2 || i === 6 || i === 7 || i === 8)  && state != true){
+                if((i === 0 || i === 1 || i === 2 || i === 6 || i === 7 || i === 8 || i === 9) && state != true){
 
                 	score+=1;
+                	console.log(i + " - hit")
+                	if(!sound){
+                	console.log(i + " - sounded")
+						playEffect();
+					}
                 }
                 
-                 //booster item hit on star only
-                 if(i === 1 || i === 9){
-
-                 	//ctx.drawImage(splash, 17, 13, 40, 50, hero.body.x-17, hero.body.y, 50, 50);
-                 	//booster = true;
-                 }
-                 console.log("invisible");
-
 	        }
 		}
 
