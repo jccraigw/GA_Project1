@@ -459,9 +459,9 @@ var collisionDetection_Items = function(){
                 if((i === 0 || i === 1 || i === 2 || i === 6 || i === 7 || i === 8 || i === 9) && state != true){
 
                 	score+=1;
-                	console.log(i + " - hit")
+                	//console.log(i + " - hit")
                 	if(!sound){
-                	console.log(i + " - sounded")
+                	//console.log(i + " - sounded")
 						playEffect();
 					}
                 }
@@ -623,7 +623,7 @@ var checkDeathPosition = function(){
 		
 		//delay restart to give time to reset
 		//testing if this is where i can display message
-		console.log("in collisionDetection");
+		//console.log("in collisionDetection");
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 		//	alert('GAME OVER');
 		healthDisplay();
