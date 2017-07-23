@@ -4,8 +4,8 @@
 DEEP SEA TREASURE HUNT -- WDI PROJECT 1
 
 Test the application here! 
--Desktop - http://jccraigw.github.io/project1_Desktop/ 
--Mobile - http://jccraigw.github.io/project1/
+- Desktop - http://jccraigw.github.io/project1_Desktop/ 
+- Mobile - http://jccraigw.github.io/project1/
 
 ## User stories
 1. User navigates left and right through the course avoiding objects and collecting treasure chest. User gets one point per chest.
